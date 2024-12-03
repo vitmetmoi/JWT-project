@@ -1,19 +1,5 @@
-import mysql from 'mysql2/promise';
 
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: "Duyngo123@",
-    database: 'jwt',
-});
-
-connection.connect(function (error) {
-    if (!!error) {
-        console.log(error);
-    } else {
-        console.log('Connected!:)');
-    }
-});
+import userService from '../service/userService'
 
 
 const handleHelloWorld = (req, res) => {
@@ -26,21 +12,15 @@ const handleUserPage = (req, res) => {
 }
 
 const handleCreateUser = (req, res) => {
-
-    console.log(req.body);
-
-    connection.query(
-        'SELECT * FROM users',
-        function (err, results, fields) {
-            console.log(results);
-        }
-
-    );
-
-
+    userService.createNewUserService(req.body.email, req.body.userName, req.body.password);
     return res.send("completed")
 }
 
+const handleGetAllUsers = (req, res) => {
+    userService.getAllUsersService();
+    return res.send("data")
+}
+
 module.exports = {
-    handleHelloWorld, handleUserPage, handleCreateUser
+    handleHelloWorld, handleUserPage, handleCreateUser, handleGetAllUsers
 }
