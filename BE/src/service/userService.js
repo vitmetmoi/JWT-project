@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 import mysql from 'mysql2/promise';
-import bluebird from 'bluebird';
+import bluebird, { resolve } from 'bluebird';
 
 
 
@@ -59,7 +59,7 @@ let deleteUserService = async (id) => {
     try {
         const connection = await createConnect();
         const [rows, fields] = await connection.execute(
-            "SELECT * FROM users"
+            "DELETE FROM users WHERE id = ?", [id]
         );
     }
     catch (e) {
@@ -67,6 +67,38 @@ let deleteUserService = async (id) => {
     }
 }
 
+const editUserService = async (id, email, userName, password) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const connection = await createConnect();
+            const [rows, fields] = await connection.execute(
+                "UPDATE users SET email = ? , userName = ? , password = ? WHERE id = ? ", [email, userName, password, id]
+            );
+            console.log(rows);
+            resolve()
+        }
+        catch (e) {
+            reject(e);
+        }
+    })
+
+}
+
+const getUserByIdService = async (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const connection = await createConnect();
+            const [rows, fields] = await connection.execute(
+                "SELECT * FROM users WHERE id = ? ", [id]
+            );
+            resolve(rows);
+        }
+        catch (e) {
+            reject(e);
+        }
+    })
+}
+
 module.exports = {
-    hashPasswordService, createNewUserService, getAllUsersService, deleteUserService
+    hashPasswordService, createNewUserService, getAllUsersService, deleteUserService, getUserByIdService, editUserService
 }
