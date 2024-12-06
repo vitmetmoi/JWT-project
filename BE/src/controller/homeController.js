@@ -12,8 +12,8 @@ const handleUserPage = async (req, res) => {
     return res.render("user.ejs", { users })
 }
 
-const handleCreateUser = (req, res) => {
-    userService.createNewUserService(req.body.email, req.body.userName, req.body.password);
+const handleCreateUser = async (req, res) => {
+    await userService.createNewUserService(req.body.email, req.body.userName, req.body.password);
     return res.redirect("/user")
 }
 
@@ -39,8 +39,7 @@ const handleEditUser = async (req, res) => {
     let id = req.body.id;
     let email = req.body.email;
     let userName = req.body.userName;
-    let password = req.body.password;
-    await userService.editUserService(id, email, userName, password);
+    await userService.editUserService(id, email, userName);
     return res.redirect('/user')
 }
 

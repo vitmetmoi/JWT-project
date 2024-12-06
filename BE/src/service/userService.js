@@ -4,16 +4,6 @@ import bluebird, { resolve } from 'bluebird';
 import db from '../models/index'
 
 
-const createConnect = async () => {
-    const connection = await mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        database: 'jwt',
-        password: "Duyngo123@",
-        Promise: bluebird,
-    });
-    return connection;
-}
 
 
 
@@ -68,19 +58,17 @@ let deleteUserService = async (id) => {
     }
 }
 
-const editUserService = async (id, email, userName, password) => {
+const editUserService = async (id, email, userName) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let user = await db.User.findOne({
-                where: { id: id }
-            })
+            await db.User.update(
+                { email: email, userName: userName },
+                {
+                    where: { id: id }
+                }
 
-            user.email = email;
-            user.userName = userName;
-            user.password = password;
-
-            await user.save;
-            resolve()
+            );
+            resolve();
         }
         catch (e) {
             reject(e);
@@ -92,10 +80,11 @@ const editUserService = async (id, email, userName, password) => {
 const getUserByIdService = async (id) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let user = db.User.findOne({
-                where: { id: id }
+            let user = await db.User.findOne({
+                where: { id: id },
+                raw: true
             })
-
+            console.log(user);
             resolve(user);
         }
         catch (e) {
