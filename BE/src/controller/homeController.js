@@ -40,10 +40,6 @@ const handleEditUser = async (req, res) => {
     let email = req.body.email;
     let userName = req.body.userName;
     let password = req.body.password;
-    console.log(id);
-    console.log(email);
-    console.log(userName);
-    console.log(password);
     await userService.editUserService(id, email, userName, password);
     return res.redirect('/user')
 }

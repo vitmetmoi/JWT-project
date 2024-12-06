@@ -1,6 +1,7 @@
 import express from "express";
 import configViewEngine from "./config/viewEngine";
 import initWebRoutes from "./routes/web";
+import connectToDataBase from './config/connectDB'
 require('dotenv').config();
 const app = express();
 
@@ -16,6 +17,9 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 //init web routes
 initWebRoutes(app);
+//connect to database
+connectToDataBase();
+
 
 const PORT = process.env.PORT || 8080;
 
