@@ -1,19 +1,9 @@
 const bcrypt = require('bcryptjs');
 import mysql from 'mysql2/promise';
 import bluebird, { resolve } from 'bluebird';
+import db from '../models/index'
 
 
-
-const createConnect = async () => {
-    const connection = await mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        database: 'jwt',
-        password: "Duyngo123@",
-        Promise: bluebird,
-    });
-    return connection;
-}
 
 
 
@@ -28,10 +18,11 @@ let createNewUserService = async (email, userName, password) => {
     let hashPassword = hashPasswordService(password)
 
     try {
-        const connection = await createConnect();
-        const [rows, fields] = await connection.execute(
-            'INSERT INTO users (email,password,userName) VALUES (?,?,?)', [email, hashPassword, userName],
-        );
+        await db.User.create({
+            email: email,
+            userName: userName,
+            password: hashPassword
+        })
     }
 
     catch (e) {
@@ -41,13 +32,10 @@ let createNewUserService = async (email, userName, password) => {
 
 let getAllUsersService = async () => {
     try {
-        const connection = await createConnect();
-        const [rows, fields] = await connection.execute(
-            "SELECT * FROM users"
-        );
-
-        return rows;
+        let users = await db.User.findAll();
+        return users;
     }
+
     catch (e) {
         console.log(e);
     }
@@ -57,25 +45,30 @@ let getAllUsersService = async () => {
 
 let deleteUserService = async (id) => {
     try {
-        const connection = await createConnect();
-        const [rows, fields] = await connection.execute(
-            "DELETE FROM users WHERE id = ?", [id]
-        );
+        let user = await db.User.findOne(
+            {
+                where: { id: id }
+            }
+        )
+
+        await user.destroy();
     }
     catch (e) {
         console.log(e);
     }
 }
 
-const editUserService = async (id, email, userName, password) => {
+const editUserService = async (id, email, userName) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const connection = await createConnect();
-            const [rows, fields] = await connection.execute(
-                "UPDATE users SET email = ? , userName = ? , password = ? WHERE id = ? ", [email, userName, password, id]
+            await db.User.update(
+                { email: email, userName: userName },
+                {
+                    where: { id: id }
+                }
+
             );
-            console.log(rows);
-            resolve()
+            resolve();
         }
         catch (e) {
             reject(e);
@@ -87,11 +80,12 @@ const editUserService = async (id, email, userName, password) => {
 const getUserByIdService = async (id) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const connection = await createConnect();
-            const [rows, fields] = await connection.execute(
-                "SELECT * FROM users WHERE id = ? ", [id]
-            );
-            resolve(rows);
+            let user = await db.User.findOne({
+                where: { id: id },
+                raw: true
+            })
+            console.log(user);
+            resolve(user);
         }
         catch (e) {
             reject(e);

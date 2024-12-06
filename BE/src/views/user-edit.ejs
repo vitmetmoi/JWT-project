@@ -19,21 +19,16 @@
             <div class="ml-auto mr-auto">
                 <div class="mb-3 col-6">
                     <label for="exampleInputEmail1" class="form-label">Email address</label>
-                    <input value="<%=userData[0].email%>" name="email" type="email" class="form-control"
+                    <input value="<%=userData.email%>" name="email" type="email" class="form-control"
                         id="exampleInputEmail1" aria-describedby="emailHelp">
                     <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
                 </div>
                 <div class="mb-3 col-6">
                     <label for="exampleInputPassword1" class="form-label">Username</label>
-                    <input value="<%=userData[0].userName%>" name="userName" type="text" class="form-control"
+                    <input value="<%=userData.userName%>" name="userName" type="text" class="form-control"
                         id="username">
                 </div>
-                <div class="mb-3 col-6">
-                    <label for="exampleInputPassword1" class="form-label">Password</label>
-                    <input value="<%=userData[0].password%>" name="password" type="password" class="form-control"
-                        id="exampleInputPassword1">
-                </div>
-                <input name="id" value="<%=userData[0].id%>" hidden>
+                <input name="id" value="<%=userData.id%>" hidden>
                 <button type="submit" class="btn btn-primary col-6">Edit</button>
             </div>
         </form>
