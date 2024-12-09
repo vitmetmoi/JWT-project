@@ -32,7 +32,23 @@ let createNewUserService = async (email, userName, password) => {
 
 let getAllUsersService = async () => {
     try {
-        let users = await db.User.findAll();
+        let users = await db.User.findAll({
+            include: [{ model: db.Group }],
+            raw: true,
+            nest: true
+        });
+
+        let groups = await db.Group.findAll({
+            include: [{ model: db.Role }],
+            raw: true,
+            nest: true
+        })
+        let roles = await db.Role.findAll({
+            raw: true,
+            nest: true
+        })
+        console.log("checkk users", roles);
+        // console.log("checkk users", users);
         return users;
     }
 

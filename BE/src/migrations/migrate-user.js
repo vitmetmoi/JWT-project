@@ -15,7 +15,13 @@ module.exports = {
       userName: {
         type: Sequelize.STRING
       },
+      gender: {
+        type: Sequelize.STRING
+      },
       password: {
+        type: Sequelize.STRING
+      },
+      groupId: {
         type: Sequelize.STRING
       },
       createdAt: {
