@@ -29,7 +29,7 @@ const Login = (props) => {
 
                                 <button className='btn btn-primary'>Login</button>
                                 <hr />
-                                <button className='btn btn-success'>Create new account</button>
+                                <button className='register btn btn-success'>Create new account</button>
                             </div>
                         </div>
                     </div>

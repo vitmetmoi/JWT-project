@@ -10,11 +10,15 @@
     border: 1px solid red;
 }
 
+.register {
+    background-color: #42b72a !important;
+}
+
 
 .login-container {
 
     .content-left {
-        padding-top: 12%;
+        padding-top: 20%;
 
         .left-up {
             font-size  : 250%;
@@ -32,7 +36,7 @@
         height: 650px;
 
         .login-form {
-            margin-top   : 20%;
+            margin-top   : 50%;
             padding      : 20px;
             height       : 300px;
             box-shadow   : rgba(149, 157, 165, 0.2) 0px 8px 24px;
