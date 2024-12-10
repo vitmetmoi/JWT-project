@@ -19,7 +19,7 @@
 }
 
 
-.login-container {
+.Register-container {
 
     .content-left {
         padding-top: 20%;
@@ -37,12 +37,14 @@
     }
 
     .content-right {
-        height: 700px;
+        height         : 700px;
+        display        : flex;
+        flex-direction : row;
+        justify-content: center;
 
-        .login-form {
-            margin-top   : 50%;
+        .Register-form {
             padding      : 20px;
-            height       : 405px;
+            height       : 500px;
             box-shadow   : rgba(149, 157, 165, 0.2) 0px 8px 24px;
             border-radius: 20px;
 
@@ -58,6 +60,14 @@
 
                     &:hover {
                         opacity: 0.4;
+                    }
+                }
+
+                .have-account {
+                    cursor: pointer;
+
+                    &:hover {
+                        opacity: 0.7;
                     }
                 }
             }
