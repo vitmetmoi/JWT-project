@@ -8,16 +8,19 @@ import {
 } from "react-router-dom";
 
 import Login from './components/Login/Login'
-
+import Register from './components/Register/Register';
 function App() {
   return (
     <Router>
       <div className="App">
-        <Route path="/login">
-          <Login></Login>
-        </Route>
 
         <Switch>
+          <Route path="/login">
+            <Login></Login>
+          </Route>
+          <Route path="/register">
+            <Register></Register>
+          </Route>
           <Route path="/contact">
             <Nav />
             about
@@ -30,7 +33,7 @@ function App() {
             <Nav />
             user
           </Route>
-          <Route path="/home">
+          <Route path="/">
             <Nav />
             hello react!
           </Route>
