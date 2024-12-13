@@ -1,8 +1,14 @@
 import React from 'react';
 import { useHistory } from "react-router-dom";
-import './Login.scss'
+import './Login.scss';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Login = (props) => {
     let history = useHistory();
+
+    const handleOnClickLogin = () => {
+        toast.info("Wow so easy!");
+    }
     const handleOnClickRegister = () => {
         history.push("/register");
     }
@@ -36,7 +42,9 @@ const Login = (props) => {
                                 </div>
 
 
-                                <button className='btn btn-primary mt-3'>Login</button>
+                                <button
+                                    onClick={() => handleOnClickLogin()}
+                                    className='btn btn-primary mt-3'>Login</button>
                                 <span className='forgot-password'>Forgot your password?</span>
                                 <hr className='opacity-50'></hr>
                                 <button onClick={() => handleOnClickRegister()} className='register btn btn-success'>Create new account</button>

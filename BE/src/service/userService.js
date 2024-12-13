@@ -14,15 +14,76 @@ let hashPasswordService = (userPassword) => {
     return hash;
 }
 
-let createNewUserService = async (email, userName, password) => {
-    let hashPassword = hashPasswordService(password)
-
+const checkValidateEmailService = async (email) => {
     try {
-        await db.User.create({
-            email: email,
-            userName: userName,
-            password: hashPassword
-        })
+        let user = await db.User.findOne({
+            where: { email: email },
+            raw: true
+        });
+        if (user) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    catch (e) {
+        console.log(e);
+    }
+
+}
+
+const checkValidatePhoneNumber = async (phoneNumber) => {
+    try {
+        let user = await db.User.findOne({
+            where: { phoneNumber: phoneNumber },
+            raw: true
+
+        });
+        if (user) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    catch (e) {
+        console.log(e);
+    }
+}
+
+let createNewUserService = async (userData) => {
+    try {
+        let emailIsValid = await checkValidateEmailService(userData.email);
+        let phoneNumberIsValid = await checkValidatePhoneNumber(userData.phoneNumber);
+        if (emailIsValid === false) {
+            return {
+                data: "email",
+                errCode: -1,
+                errMessage: "Email has already exits"
+            }
+        }
+        else if (phoneNumberIsValid === false) {
+            return {
+                data: 'phoneNumber',
+                errCode: -1,
+                errMessage: "PhoneNumber has already exits"
+            }
+        }
+        else {
+            let hashPassword = hashPasswordService(userData.password);
+            await db.User.create({
+                email: userData.email,
+                userName: userData.userName,
+                phoneNumber: userData.phoneNumber,
+                password: hashPassword
+            })
+            return {
+                data: '',
+                errCode: 0,
+                errMessage: "Done"
+            }
+        }
     }
 
     catch (e) {
@@ -108,6 +169,8 @@ const getUserByIdService = async (id) => {
         }
     })
 }
+
+
 
 module.exports = {
     hashPasswordService, createNewUserService, getAllUsersService, deleteUserService, getUserByIdService, editUserService

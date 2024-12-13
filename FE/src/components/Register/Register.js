@@ -2,6 +2,9 @@ import React from 'react';
 import './Register.scss'
 import { useHistory } from "react-router-dom";
 import { useEffect, useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { createUserService } from '../../service/userService';
 const Register = (props) => {
     let history = useHistory();
 
@@ -9,25 +12,117 @@ const Register = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const defaultValidInput = {
+        isValidUserName: true,
+        isValidEmail: true,
+        isValidPhoneNumber: true,
+        isValidPassword: true,
+        isValidConfirmPassword: true
+    }
+    const [objCheckInput, setObjCheckInput] = useState(defaultValidInput);
 
     const handleOnClickLogin = () => {
         history.push('/login')
     }
 
-    const handleOnClickRegister = () => {
-        let userData = {
-            userName: userName,
-            email: email,
-            password: password,
-            confirmPassword: confirmPassword
+    const checkValidate = () => {
+        setObjCheckInput(defaultValidInput);
+
+        if (!userName) {
+            setObjCheckInput({ ...defaultValidInput, isValidUserName: false });
+            toast.error('Missing parameter username!')
+            return false;
         }
-        console.log("check state", userData)
+        let regx = /^\S+@\S+\.\S+$/;
+        if (!regx.test(email)) {
+            setObjCheckInput({
+                ...defaultValidInput,
+                isValidEmail: false
+            });
+            toast.error('Please enter a valid email!')
+            return false;
+        }
+        regx = /^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/g;
+        if (!regx.test(phoneNumber)) {
+            setObjCheckInput({ ...defaultValidInput, isValidPhoneNumber: false });
+            toast.error('Missing parameter username!')
+            return false;
+        }
+        if (!password) {
+            setObjCheckInput({
+                ...defaultValidInput,
+                isValidPassword: false
+            });
+            toast.error('Missing parameter password!')
+            return false;
+        }
+        if (!confirmPassword) {
+            setObjCheckInput({
+                ...defaultValidInput,
+                isValidConfirmPassword: false
+            });
+            toast.error('Please confirm your password!')
+            return false;
+        }
+        if (password !== confirmPassword) {
+            setObjCheckInput({
+                ...defaultValidInput,
+                isValidConfirmPassword: false
+            });
+            toast.error("Confirm password doesn't equal to previous password!"
+            )
+            return false;
+        }
+        return true;
+    }
+
+    const handleOnClickRegister = async () => {
+
+        if (checkValidate()) {
+            let userData = {
+                userName: userName,
+                email: email,
+                phoneNumber: phoneNumber,
+                password: password,
+            }
+
+            let res = await createUserService(userData);
+
+            if (res) {
+                res = res.data
+            }
+
+            if (res && res.errCode === 0) {
+                res = res.data;
+                toast.success("Create account completed!")
+                history.push('/login')
+            }
+            else if (res && res.errCode === -1 && res.data === "email") {
+
+                setObjCheckInput({ ...defaultValidInput, isValidEmail: false })
+                toast.warn(res.errMessage)
+
+            }
+            else if (res && res.errCode === -1 && res.data === "phoneNumber") {
+
+                setObjCheckInput({ ...defaultValidInput, isValidPhoneNumber: false })
+                toast.warn(res.errMessage)
+            }
+            else {
+                toast.warn("Error!");
+            }
+        }
+        else {
+            toast.warn("Error!");
+        }
+
+
     }
     return (
 
         <div className='Register-container'>
             <div className='container'>
-
                 <div className='content-right col-md-12 col-xs-12 mt-5 '>
                     <div className='Register-form col-md-4 ml-1'>
                         <div className='form-content'>
@@ -40,7 +135,7 @@ const Register = (props) => {
 
                                 <input
                                     type="text"
-                                    class="form-control"
+                                    className={objCheckInput.isValidUserName ? "form-control" : "is-invalid form-control"}
                                     id="exampleInputEmail1"
                                     aria-describedby="emailHelp"
                                     placeholder="Enter username"
@@ -48,21 +143,36 @@ const Register = (props) => {
                                 ></input>
 
                             </div>
+
+
                             <div class="form-group">
                                 <input
+
                                     type="text"
-                                    class="form-control"
+                                    className={objCheckInput.isValidEmail ? "form-control" : "is-invalid form-control"}
                                     id="exampleInputPassword"
                                     aria-describedby="emailHelp"
                                     placeholder="Enter email"
                                     onChange={(event) => setEmail(event.target.value)}
                                 ></input>
                             </div>
+
+                            <div class="form-group">
+                                <input
+                                    type="text"
+                                    className={objCheckInput.isValidPhoneNumber ? "form-control" : "is-invalid form-control"}
+                                    id="exampleInputPassword"
+                                    aria-describedby="emailHelp"
+                                    placeholder="Enter phone number"
+                                    onChange={(event) => setPhoneNumber(event.target.value)}
+                                ></input>
+                            </div>
+
                             <div class="form-group">
 
                                 <input
                                     type="password"
-                                    class="form-control"
+                                    className={objCheckInput.isValidPassword ? "form-control" : "is-invalid form-control"}
                                     id="exampleInputPassword"
                                     aria-describedby="emailHelp"
                                     placeholder="Enter new password"
@@ -75,7 +185,7 @@ const Register = (props) => {
 
                                 <input
                                     type="password"
-                                    class="form-control"
+                                    className={objCheckInput.isValidConfirmPassword ? "form-control" : "is-invalid form-control"}
                                     id="exampleInputPassword"
                                     aria-describedby="emailHelp"
                                     placeholder="Confirm password"
@@ -96,7 +206,6 @@ const Register = (props) => {
                         </div>
                     </div>
                 </div>
-
             </div>
         </div >
     );

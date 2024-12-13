@@ -43,6 +43,18 @@ const handleEditUser = async (req, res) => {
     return res.redirect('/user')
 }
 
+const handleRegister = async (req, res) => {
+    let data = req.body;
+    let result = await userService.createNewUserService(data);
+    return res.status(200).json({
+        data: result.data,
+        errMessage: result.errMessage,
+        errCode: result.errCode
+    })
+}
+
 module.exports = {
-    handleHelloWorld, handleUserPage, handleCreateUser, handleGetAllUsers, handleDeleteUser, handleEditUser, handleEditUserPage
+    handleHelloWorld, handleUserPage, handleCreateUser,
+    handleGetAllUsers, handleDeleteUser, handleEditUser, handleEditUserPage,
+    handleRegister
 }
