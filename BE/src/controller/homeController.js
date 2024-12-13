@@ -43,6 +43,48 @@ const handleEditUser = async (req, res) => {
     return res.redirect('/user')
 }
 
+const handleRegister = async (req, res) => {
+    try {
+        let data = req.body;
+        let result = await userService.createNewUserService(data);
+        return res.status(200).json({
+            DT: result.DT,
+            EM: result.EM,
+            EC: result.EC
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(200).json({
+            DT: '',
+            EM: "err from sever...",
+            EC: -1
+        })
+    }
+
+}
+
+const handleLogin = async (req, res) => {
+    try {
+        let data = req.body;
+        let result = await userService.loginUserService(data);
+        return res.status(200).json({
+            DT: result.DT,
+            EM: result.EM,
+            EC: result.EC
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(200).json({
+            DT: '',
+            EM: "err from sever...",
+            EC: -1
+        })
+    }
+
+}
+
 module.exports = {
-    handleHelloWorld, handleUserPage, handleCreateUser, handleGetAllUsers, handleDeleteUser, handleEditUser, handleEditUserPage
+    handleHelloWorld, handleUserPage, handleCreateUser,
+    handleGetAllUsers, handleDeleteUser, handleEditUser, handleEditUserPage,
+    handleRegister, handleLogin
 }

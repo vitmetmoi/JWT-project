@@ -2,8 +2,7 @@ const bcrypt = require('bcryptjs');
 import mysql from 'mysql2/promise';
 import bluebird, { resolve } from 'bluebird';
 import db from '../models/index'
-
-
+import { Op } from 'sequelize';
 
 
 
@@ -14,19 +13,121 @@ let hashPasswordService = (userPassword) => {
     return hash;
 }
 
-let createNewUserService = async (email, userName, password) => {
-    let hashPassword = hashPasswordService(password)
-
+const checkValidateEmailService = async (email) => {
     try {
-        await db.User.create({
-            email: email,
-            userName: userName,
-            password: hashPassword
-        })
+        let user = await db.User.findOne({
+            where: { email: email },
+            raw: true
+        });
+        if (user) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    catch (e) {
+        console.log(e);
+    }
+
+}
+
+const checkValidatePhoneNumber = async (phoneNumber) => {
+    try {
+        let user = await db.User.findOne({
+            where: { phoneNumber: phoneNumber },
+            raw: true
+
+        });
+        if (user) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    catch (e) {
+        console.log(e);
+    }
+}
+
+let createNewUserService = async (userData) => {
+    try {
+        let emailIsValid = await checkValidateEmailService(userData.email);
+        let phoneNumberIsValid = await checkValidatePhoneNumber(userData.phoneNumber);
+        if (emailIsValid === false) {
+            return {
+                DT: "email",
+                EC: -1,
+                EM: "Email has already exits"
+            }
+        }
+        else if (phoneNumberIsValid === false) {
+            return {
+                DT: 'phoneNumber',
+                EC: -1,
+                EM: "PhoneNumber has already exits"
+            }
+        }
+        else {
+            let hashPassword = hashPasswordService(userData.password);
+            await db.User.create({
+                email: userData.email,
+                userName: userData.userName,
+                phoneNumber: userData.phoneNumber,
+                password: hashPassword
+            })
+            return {
+                DT: '',
+                EC: 0,
+                EM: "Done"
+            }
+        }
     }
 
     catch (e) {
         console.log(e);
+    }
+}
+
+const loginUserService = async (userData) => {
+    try {
+
+        let user = await db.User.findOne({
+            where: {
+                [Op.or]: [{ email: userData.loginValue }, { phoneNumber: userData.loginValue }]
+            }
+        })
+
+        if (user) {
+            let result = bcrypt.compareSync(userData.password, user.password);
+            if (result === true) {
+                return {
+                    DT: '',
+                    EC: 0,
+                    EM: "Done"
+                }
+            }
+            else {
+                return {
+                    DT: '',
+                    EC: -1,
+                    EM: "Your password is incorrect!"
+                }
+            }
+
+        }
+        else {
+            return {
+                DT: '',
+                EC: -1,
+                EM: "Your email or phone number is incorrect!"
+            }
+        }
+
+
+    } catch (error) {
+        console.log(error);
     }
 }
 
@@ -109,6 +210,9 @@ const getUserByIdService = async (id) => {
     })
 }
 
+
+
 module.exports = {
-    hashPasswordService, createNewUserService, getAllUsersService, deleteUserService, getUserByIdService, editUserService
+    hashPasswordService, createNewUserService,
+    getAllUsersService, deleteUserService, getUserByIdService, editUserService, loginUserService
 }
