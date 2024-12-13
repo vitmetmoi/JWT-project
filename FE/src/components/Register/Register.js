@@ -93,21 +93,21 @@ const Register = (props) => {
                 res = res.data
             }
 
-            if (res && res.errCode === 0) {
+            if (res && res.EC === 0) {
                 res = res.data;
                 toast.success("Create account completed!")
                 history.push('/login')
             }
-            else if (res && res.errCode === -1 && res.data === "email") {
+            else if (res && res.EC === -1 && res.DT === "email") {
 
                 setObjCheckInput({ ...defaultValidInput, isValidEmail: false })
-                toast.warn(res.errMessage)
+                toast.warn(res.EM)
 
             }
-            else if (res && res.errCode === -1 && res.data === "phoneNumber") {
+            else if (res && res.EC === -1 && res.DT === "phoneNumber") {
 
                 setObjCheckInput({ ...defaultValidInput, isValidPhoneNumber: false })
-                toast.warn(res.errMessage)
+                toast.warn(res.EM)
             }
             else {
                 toast.warn("Error!");

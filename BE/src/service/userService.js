@@ -2,8 +2,7 @@ const bcrypt = require('bcryptjs');
 import mysql from 'mysql2/promise';
 import bluebird, { resolve } from 'bluebird';
 import db from '../models/index'
-
-
+import { Op } from 'sequelize';
 
 
 
@@ -58,16 +57,16 @@ let createNewUserService = async (userData) => {
         let phoneNumberIsValid = await checkValidatePhoneNumber(userData.phoneNumber);
         if (emailIsValid === false) {
             return {
-                data: "email",
-                errCode: -1,
-                errMessage: "Email has already exits"
+                DT: "email",
+                EC: -1,
+                EM: "Email has already exits"
             }
         }
         else if (phoneNumberIsValid === false) {
             return {
-                data: 'phoneNumber',
-                errCode: -1,
-                errMessage: "PhoneNumber has already exits"
+                DT: 'phoneNumber',
+                EC: -1,
+                EM: "PhoneNumber has already exits"
             }
         }
         else {
@@ -79,15 +78,56 @@ let createNewUserService = async (userData) => {
                 password: hashPassword
             })
             return {
-                data: '',
-                errCode: 0,
-                errMessage: "Done"
+                DT: '',
+                EC: 0,
+                EM: "Done"
             }
         }
     }
 
     catch (e) {
         console.log(e);
+    }
+}
+
+const loginUserService = async (userData) => {
+    try {
+
+        let user = await db.User.findOne({
+            where: {
+                [Op.or]: [{ email: userData.loginValue }, { phoneNumber: userData.loginValue }]
+            }
+        })
+
+        if (user) {
+            let result = bcrypt.compareSync(userData.password, user.password);
+            if (result === true) {
+                return {
+                    DT: '',
+                    EC: 0,
+                    EM: "Done"
+                }
+            }
+            else {
+                return {
+                    DT: '',
+                    EC: -1,
+                    EM: "Your password is incorrect!"
+                }
+            }
+
+        }
+        else {
+            return {
+                DT: '',
+                EC: -1,
+                EM: "Your email or phone number is incorrect!"
+            }
+        }
+
+
+    } catch (error) {
+        console.log(error);
     }
 }
 
@@ -173,5 +213,6 @@ const getUserByIdService = async (id) => {
 
 
 module.exports = {
-    hashPasswordService, createNewUserService, getAllUsersService, deleteUserService, getUserByIdService, editUserService
+    hashPasswordService, createNewUserService,
+    getAllUsersService, deleteUserService, getUserByIdService, editUserService, loginUserService
 }

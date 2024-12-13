@@ -9,6 +9,7 @@ const router = express.Router();
 
 const initApiRoutes = (app) => {
     router.post('/register', homeController.handleRegister)
+    router.post('/login', homeController.handleLogin)
     return app.use("/api", router)
 }
 

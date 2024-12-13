@@ -1,13 +1,53 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
 import './Login.scss';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { loginService } from '../../service/userService';
 const Login = (props) => {
     let history = useHistory();
+    const [loginValue, setLoginValue] = useState('');
+    const [password, setPassword] = useState('');
+    const defaultObjValidInput = {
+        loginValueIsValid: true,
+        passwordIsValid: true
+    }
+    const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
 
-    const handleOnClickLogin = () => {
-        toast.info("Wow so easy!");
+    const validateInput = () => {
+        setObjValidInput(defaultObjValidInput);
+        if (!loginValue || loginValue === '') {
+            setObjValidInput({ ...defaultObjValidInput, loginValueIsValid: false });
+            toast.warn('Missing phone number or email parameter!');
+            return false;
+        }
+        if (!password || password === '') {
+            setObjValidInput({ ...defaultObjValidInput, passwordIsValid: false });
+            toast.warn('Missing password parameter!');
+            return false;
+        }
+        return true;
+    }
+
+    const handleOnClickLogin = async () => {
+        if (validateInput()) {
+            let data = {
+                loginValue: loginValue,
+                password: password
+            }
+            let res = await loginService(data);
+            if (res) {
+                res = res.data
+            }
+
+            if (res && res.EC === 0) {
+                toast.success("Done!")
+            }
+            else {
+                toast.warn(res.EM);
+            }
+        }
+
     }
     const handleOnClickRegister = () => {
         history.push("/register");
@@ -32,12 +72,28 @@ const Login = (props) => {
 
                                 <div class="form-group">
                                     {/* <label for="exampleInputEmail1">Username</label> */}
-                                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter username"></input>
+                                    <input
+                                        type="email"
+                                        className={objValidInput.loginValueIsValid ? "form-control" : "is-invalid form-control"}
+                                        id="exampleInputEmail1"
+                                        aria-describedby="emailHelp"
+                                        placeholder="Enter phone number or email"
+                                        value={loginValue}
+                                        onChange={(event) => setLoginValue(event.target.value)}
+                                    ></input>
 
                                 </div>
                                 <div class="form-group">
                                     {/* <label for="exampleInputEmail1">Password</label> */}
-                                    <input type="email" class="form-control" id="exampleInputPassword" aria-describedby="emailHelp" placeholder="Enter password"></input>
+                                    <input
+                                        type="password"
+                                        className={objValidInput.passwordIsValid ? "form-control" : "is-invalid form-control"}
+                                        id="exampleInputPassword"
+                                        aria-describedby="emailHelp"
+                                        placeholder="Enter password"
+                                        value={password}
+                                        onChange={(event) => setPassword(event.target.value)}
+                                    ></input>
 
                                 </div>
 
