@@ -10,8 +10,8 @@ const Nav = (props) => {
     return (
         <div className='navigation-container'>
             <ul>
-                <li><Link className="active" to="/home">Home</Link></li>
-                <li><Link to="/news">News</Link></li>
+                <li><Link className="active" to="/user">Home</Link></li>
+                <li><Link to="/user">User</Link></li>
                 <li><Link to="/contact">Contact</Link></li>
                 <li><Link to="/about">About</Link></li>
             </ul>
