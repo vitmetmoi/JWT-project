@@ -1,5 +1,5 @@
 
-import userService from '../service/userService'
+import userService from '../service/userHomeService'
 
 
 const handleHelloWorld = (req, res) => {
@@ -82,6 +82,8 @@ const handleLogin = async (req, res) => {
     }
 
 }
+
+
 
 module.exports = {
     handleHelloWorld, handleUserPage, handleCreateUser,

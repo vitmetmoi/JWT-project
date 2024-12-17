@@ -1,218 +1,177 @@
-const bcrypt = require('bcryptjs');
-import mysql from 'mysql2/promise';
-import bluebird, { resolve } from 'bluebird';
-import db from '../models/index'
-import { Op } from 'sequelize';
-
-
-
-let hashPasswordService = (userPassword) => {
-    let salt = bcrypt.genSaltSync(10);
-    let hash = bcrypt.hashSync(userPassword, salt);
-
-    return hash;
-}
-
-const checkValidateEmailService = async (email) => {
+import db from "../models";
+import _ from 'lodash'
+const getUserService = async (type, id) => {
     try {
-        let user = await db.User.findOne({
-            where: { email: email },
-            raw: true
-        });
-        if (user) {
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
-    catch (e) {
-        console.log(e);
-    }
-
-}
-
-const checkValidatePhoneNumber = async (phoneNumber) => {
-    try {
-        let user = await db.User.findOne({
-            where: { phoneNumber: phoneNumber },
-            raw: true
-
-        });
-        if (user) {
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
-    catch (e) {
-        console.log(e);
-    }
-}
-
-let createNewUserService = async (userData) => {
-    try {
-        let emailIsValid = await checkValidateEmailService(userData.email);
-        let phoneNumberIsValid = await checkValidatePhoneNumber(userData.phoneNumber);
-        if (emailIsValid === false) {
-            return {
-                DT: "email",
-                EC: -1,
-                EM: "Email has already exits"
-            }
-        }
-        else if (phoneNumberIsValid === false) {
-            return {
-                DT: 'phoneNumber',
-                EC: -1,
-                EM: "PhoneNumber has already exits"
-            }
-        }
-        else {
-            let hashPassword = hashPasswordService(userData.password);
-            await db.User.create({
-                email: userData.email,
-                userName: userData.userName,
-                phoneNumber: userData.phoneNumber,
-                password: hashPassword
-            })
+        if (!type || !id) {
             return {
                 DT: '',
-                EC: 0,
-                EM: "Done"
+                EC: -1,
+                EM: 'Missing parameter!'
+            }
+        }
+        else {
+            let data = ''
+            if (type === 'ALL') {
+                data = await db.User.findAll({
+                    attributes: { exclude: ['password'] },
+                    include: [{ model: db.Group, attributes: ['id', 'name'] }],
+                    nest: true,
+                    raw: true
+                })
+                if (!_.isEmpty(data)) {
+                    return {
+                        DT: data,
+                        EC: 0,
+                        EM: 'Complete!'
+                    }
+                }
+                else {
+                    return {
+                        DT: '',
+                        EC: -1,
+                        EM: 'Err from sever service!'
+                    }
+                }
+
+            }
+            else {
+                data = await db.User.findOne({
+                    where: { id: id },
+                    attributes: { exclude: ['password'] },
+                    include: [{ model: db.Group, attributes: ['id', 'name'] }],
+                    nest: true,
+                    raw: true
+                })
+                console.log(data);
+                if (!_.isEmpty(data)) {
+                    return {
+                        DT: data,
+                        EC: 0,
+                        EM: 'Complete!'
+                    }
+                }
+                else {
+                    return {
+                        DT: '',
+                        EC: -1,
+                        EM: 'Err from sever service!'
+                    }
+                }
+
             }
         }
     }
-
     catch (e) {
         console.log(e);
     }
 }
 
-const loginUserService = async (userData) => {
+const createUserService = async (userData) => {
     try {
-
-        let user = await db.User.findOne({
-            where: {
-                [Op.or]: [{ email: userData.loginValue }, { phoneNumber: userData.loginValue }]
+        if (!userData) {
+            return {
+                DT: '',
+                EC: -1,
+                EM: 'Missing parameter!'
             }
-        })
-
-        if (user) {
-            let result = bcrypt.compareSync(userData.password, user.password);
-            if (result === true) {
+        }
+        else {
+            let user = await db.User.create(userData)
+            if (user) {
                 return {
                     DT: '',
-                    EC: 0,
-                    EM: "Done"
+                    EC: -1,
+                    EM: 'Completed!'
                 }
             }
             else {
                 return {
                     DT: '',
                     EC: -1,
-                    EM: "Your password is incorrect!"
+                    EM: 'Error from sever service!'
                 }
             }
-
         }
-        else {
+    }
+    catch (e) {
+        console.log(e);
+    }
+}
+const deleteUserService = async (id) => {
+    try {
+        if (!id) {
             return {
                 DT: '',
                 EC: -1,
-                EM: "Your email or phone number is incorrect!"
+                EM: 'Missing parameter!'
             }
         }
-
-
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-let getAllUsersService = async () => {
-    try {
-        let users = await db.User.findAll({
-            include: [{ model: db.Group }],
-            raw: true,
-            nest: true
-        });
-
-        let groups = await db.Group.findAll({
-            include: [{ model: db.Role }],
-            raw: true,
-            nest: true
-        })
-        let roles = await db.Role.findAll({
-            raw: true,
-            nest: true
-        })
-        console.log("checkk users", roles);
-        // console.log("checkk users", users);
-        return users;
-    }
-
-    catch (e) {
-        console.log(e);
-    }
-
-
-}
-
-let deleteUserService = async (id) => {
-    try {
-        let user = await db.User.findOne(
-            {
-                where: { id: id }
-            }
-        )
-
-        await user.destroy();
-    }
-    catch (e) {
-        console.log(e);
-    }
-}
-
-const editUserService = async (id, email, userName) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            await db.User.update(
-                { email: email, userName: userName },
-                {
-                    where: { id: id }
+        else {
+            let user = await db.User.findOne({ where: { id: id } })
+            if (user) {
+                await user.destroy();
+                return {
+                    DT: '',
+                    EC: 0,
+                    EM: 'Complete!'
                 }
+            }
+            else {
+                return {
+                    DT: '',
+                    EC: -1,
+                    EM: 'Cant find user!'
+                }
+            }
 
-            );
-            resolve();
         }
-        catch (e) {
-            reject(e);
-        }
-    })
-
+    }
+    catch (e) {
+        console.log(e);
+    }
 }
 
-const getUserByIdService = async (id) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let user = await db.User.findOne({
-                where: { id: id },
-                raw: true
-            })
-            console.log(user);
-            resolve(user);
+const editUserService = async (userData) => {
+    try {
+        if (!userData) {
+            return {
+                DT: '',
+                EC: -1,
+                EM: 'Missing parameter!'
+            }
         }
-        catch (e) {
-            reject(e);
+        else {
+            let user = await db.User.findOne({ where: { id: userData.id } })
+            if (user) {
+                user.email = userData.email;
+                user.userName = userData.userName;
+                user.phoneNumber = userData.phoneNumber;
+                user.gender = userData.gender;
+                user.groupId = userData.groupId
+
+                await user.save();
+                return {
+
+                    DT: '',
+                    EC: 0,
+                    EM: 'Complete!'
+
+                }
+            }
+            else {
+                return {
+                    DT: '',
+                    EC: -1,
+                    EM: 'Cant find user!'
+                }
+            }
         }
-    })
+    }
+    catch (e) {
+        console.log(e);
+    }
 }
-
-
 
 module.exports = {
-    hashPasswordService, createNewUserService,
-    getAllUsersService, deleteUserService, getUserByIdService, editUserService, loginUserService
+    getUserService, createUserService, deleteUserService, editUserService
 }
