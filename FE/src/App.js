@@ -1,45 +1,31 @@
 import './App.scss';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Nav from './components/Navigation/Nav';
 import {
   BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
 } from "react-router-dom";
-import Login from './components/Login/Login'
-import Register from './components/Register/Register';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import _ from 'lodash'
+import AppRoute from './routes/AppRoute';
 function App() {
+  const [account, setAccount] = useState('');
+  useEffect(() => {
+    let session = sessionStorage.getItem("account");
+    if (session) {
+      setAccount(session);
+    }
+  }, [account])
+
+
   return (
     <Router>
       <div className="App">
+        <div className='App-header'>{account && !_.isEmpty(account) && <Nav></Nav>}</div>
+        <div className='App-body'>
+          <AppRoute></AppRoute>
+        </div>
 
-        <Switch>
-          <Route path="/login">
-            <Login></Login>
-          </Route>
-          <Route path="/register">
-            <Register></Register>
-          </Route>
-          <Route path="/contact">
-            <Nav />
-            about
-          </Route>
-          <Route path="/news">
-            <Nav />
-            user
-          </Route>
-          <Route path="/about">
-            <Nav />
-            user
-          </Route>
-          <Route path="/">
-            <Nav />
-            hello react!
-          </Route>
-        </Switch>
 
         <ToastContainer
           position="bottom-right"

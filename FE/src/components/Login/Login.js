@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from "react-router-dom";
 import './Login.scss';
 import { ToastContainer, toast } from 'react-toastify';
@@ -13,6 +13,11 @@ const Login = (props) => {
         passwordIsValid: true
     }
     const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
+
+
+    useEffect(() => {
+        sessionStorage.removeItem("account");
+    }, [])
 
     const validateInput = () => {
         setObjValidInput(defaultObjValidInput);
@@ -36,21 +41,31 @@ const Login = (props) => {
                 password: password
             }
             let res = await loginService(data);
-            if (res) {
-                res = res.data
-            }
 
-            if (res && res.EC === 0) {
-                toast.success("Done!")
+
+            if (res.data && res.data.EC === 0) {
+                let data = {
+                    isAuthentication: true,
+                    token: "fake_token1233123123123"
+                }
+                sessionStorage.setItem('account', JSON.stringify(data));
+                history.push('/user');
+                window.location.reload();
             }
             else {
-                toast.warn(res.EM);
+                toast.warn(res.data.EM);
             }
         }
 
     }
     const handleOnClickRegister = () => {
         history.push("/register");
+    }
+
+    const handleOnKeyDown = (event) => {
+        if (event.key === "Enter") {
+            handleOnClickLogin();
+        }
     }
     return (
 
@@ -93,6 +108,7 @@ const Login = (props) => {
                                         placeholder="Enter password"
                                         value={password}
                                         onChange={(event) => setPassword(event.target.value)}
+                                        onKeyDown={(event) => handleOnKeyDown(event)}
                                     ></input>
 
                                 </div>
