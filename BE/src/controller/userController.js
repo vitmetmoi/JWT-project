@@ -17,7 +17,8 @@ const handleCreateUser = (req, res) => {
 
 const handleGetUser = async (req, res) => {
     try {
-        let response = await userService.getUserService(req.body.type, req.body.id);
+
+        let response = await userService.getUserService(req.query.type, req.query.id);
         if (response) {
             return res.status(200).json({
                 DT: response.DT,
