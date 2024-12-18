@@ -15,7 +15,7 @@ const initApiRoutes = (app) => {
     router.put("/editUser", userController.handleEditUser)
     router.delete('/deleteUser', userController.handleDeleteUser)
     router.get('/getUser', userController.handleGetUser)
-
+    router.get('/getPaginate', userController.handleGetPaginate)
     return app.use("/api", router)
 }
 

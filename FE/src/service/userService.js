@@ -11,6 +11,12 @@ const loginService = async (userData) => {
 const getUserService = async (type, id) => {
     return await axios.get(`http://localhost:8080/api/getUser?type=${type}&id=${id}`)
 }
+
+const getPaginateService = async (currentPage, limit) => {
+    return await axios.get(`http://localhost:8080/api/getPaginate?currentPage=${currentPage}&limit=${limit}`)
+}
+
+
 module.exports = {
-    createUserService, loginService, getUserService
+    createUserService, loginService, getUserService, getPaginateService
 }

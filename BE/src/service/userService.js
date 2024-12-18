@@ -172,6 +172,61 @@ const editUserService = async (userData) => {
     }
 }
 
+const getPaginateService = async (currentPage, limit) => {
+    try {
+
+        if (!currentPage || !limit) {
+            return {
+                DT: '',
+                EC: -1,
+                EM: 'Missing parameter...!'
+            }
+        }
+        else {
+
+            let offSet = (currentPage - 1) * limit;
+            const { count, rows } = await db.User.findAndCountAll({
+                attributes: { exclude: ['password'] },
+                include: [{ model: db.Group, attributes: ['id', 'name'] }],
+                nest: true,
+                offset: offSet,
+                limit: +limit,
+            })
+            let totalPages = Math.ceil(count / limit)
+            let data = {
+                totalRows: count,
+                totalPages: totalPages,
+                users: rows
+            }
+
+            if (rows) {
+                return {
+                    DT: data,
+                    EC: 0,
+                    EM: 'Completed...!'
+                }
+            }
+            else {
+                return {
+                    DT: '',
+                    EC: -1,
+                    EM: 'Err from sever...!'
+                }
+            }
+        }
+    }
+    catch (e) {
+        console.log(e);
+        return {
+            DT: '',
+            EC: -1,
+            EM: 'Err from sever...!'
+        }
+    }
+
+
+}
+
 module.exports = {
-    getUserService, createUserService, deleteUserService, editUserService
+    getUserService, createUserService, deleteUserService, editUserService, getPaginateService
 }

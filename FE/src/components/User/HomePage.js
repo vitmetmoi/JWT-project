@@ -2,22 +2,49 @@ import React, { useEffect, useState } from 'react';
 import _ from 'lodash';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import './HomePage.scss';
-import { getUserService } from '../../service/userService';
+import { getUserService, getPaginateService } from '../../service/userService';
+import ReactPaginate from 'react-paginate';
+
+function Items({ currentItems }) {
+    return (
+        <div className="items">
+            {currentItems && currentItems.map((item) => (
+                <div>
+                    <h3>Item #{item}</h3>
+                </div>
+            ))}
+        </div>
+    );
+}
 
 function HomePage(props) {
-    const [userData, setUserData] = useState('');
 
+
+    let itemsPerPage = 3;
+    const items = [...Array(33).keys()];
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [currentLimit, setCurrentLimit] = useState(3);
+    const [totalPages, setTotalPages] = useState(0);
+    const [listUsers, setListUsers] = useState([]);
     useEffect(() => {
-        getAllUser();
-        console.log('test data', userData);
-    }, [])
+        getPaginateData(currentPage, currentLimit);
+    }, [currentPage]);
 
-    const getAllUser = async (type, id) => {
-        let responsive = await getUserService('ALL', -1);
+    // Invoke when user click to request another page.
+    const handlePageClick = (event) => {
+        setCurrentPage(+event.selected + 1)
+    };
 
-        if (responsive && responsive.data.EC === 0) {
-            setUserData(responsive.data.DT);
+
+
+    const getPaginateData = async (pageCount, limit) => {
+        let res = await getPaginateService(pageCount, limit);
+        if (res && res.data && res.data.DT.totalPages) {
+            setTotalPages(res.data.DT.totalPages);
+            setListUsers(res.data.DT.users)
         }
+
     }
 
 
@@ -46,7 +73,7 @@ function HomePage(props) {
                         </thead>
                         <tbody>
                             {
-                                userData && userData.map((item, index) => {
+                                totalPages > 0 && listUsers && listUsers.map((item, index) => {
                                     return (
                                         <>
                                             <tr>
@@ -56,7 +83,7 @@ function HomePage(props) {
                                                 <td>{item.userName}</td>
                                                 <td>{item.gender ? item.gender : 'null'}</td>
                                                 <td>{item.phoneNumber}</td>
-                                                <td>{item.Group.name ? item.Group.name : 'null'}</td>
+                                                <td>{item.Group ? item.Group.name : 'null'}</td>
                                             </tr>
                                         </>
                                     )
@@ -68,8 +95,30 @@ function HomePage(props) {
                     </table>
                 </div>
 
+                <ReactPaginate
+                    nextLabel="next >"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={3}
+                    marginPagesDisplayed={4}
+                    pageCount={totalPages}
+                    previousLabel="< previous"
+                    pageClassName="page-item"
+                    pageLinkClassName="page-link"
+                    previousClassName="page-item"
+                    previousLinkClassName="page-link"
+                    nextClassName="page-item"
+                    nextLinkClassName="page-link"
+                    breakLabel="..."
+                    breakClassName="page-item"
+                    breakLinkClassName="page-link"
+                    containerClassName="pagination"
+                    activeClassName="active"
+                    renderOnZeroPageCount={null}
+                />
+
+
             </div>
-        </div>
+        </div >
     );
 }
 
