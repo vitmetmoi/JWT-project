@@ -1,5 +1,12 @@
 .homepage-container {
     .homepage-content {
+        .button-group {
+            display       : flex;
+            flex-direction: row;
+            gap           : 10px;
+
+        }
+
         .homepage-title {
             font-size  : 200%;
             font-weight: 600;

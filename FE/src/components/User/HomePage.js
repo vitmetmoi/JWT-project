@@ -25,7 +25,12 @@ function HomePage(props) {
         <div className='homepage-container container'>
             <div className='homepage-content mt-5 '>
                 <div className='homepage-title'>Table User</div>
-                <div class="table-responsive mt-3">
+                <div className="button-group mt-3">
+                    <button className='btn btn-info'>Refresh</button>
+                    <button className='btn btn-primary'>Create</button>
+                </div>
+
+                <div class="table-responsive mt-1">
                     <table class="table table-striped 
                     table-bordered table-hover">
                         <thead>
