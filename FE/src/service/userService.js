@@ -16,7 +16,11 @@ const getPaginateService = async (currentPage, limit) => {
     return await axios.get(`http://localhost:8080/api/getPaginate?currentPage=${currentPage}&limit=${limit}`)
 }
 
+const deleteUserService = async (id) => {
+    return await axios.delete(`http://localhost:8080/api/deleteUser?id=${id}`)
+}
+
 
 module.exports = {
-    createUserService, loginService, getUserService, getPaginateService
+    createUserService, loginService, getUserService, getPaginateService, deleteUserService
 }

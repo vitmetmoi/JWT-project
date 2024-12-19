@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import _ from 'lodash';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import './HomePage.scss';
-import { getUserService, getPaginateService } from '../../service/userService';
+import { getUserService, getPaginateService, deleteUserService } from '../../service/userService';
 import ReactPaginate from 'react-paginate';
+import ConfirmDeleteModal from './ConfirmDeleteModal';
 
 function Items({ currentItems }) {
     return (
@@ -27,6 +28,8 @@ function HomePage(props) {
     const [currentLimit, setCurrentLimit] = useState(3);
     const [totalPages, setTotalPages] = useState(0);
     const [listUsers, setListUsers] = useState([]);
+    const [isOpenModal, setIsOpenModal] = useState(false);
+    const [selectedUser, setSelectedUser] = useState('');
     useEffect(() => {
         getPaginateData(currentPage, currentLimit);
     }, [currentPage]);
@@ -36,7 +39,19 @@ function HomePage(props) {
         setCurrentPage(+event.selected + 1)
     };
 
+    const changeOpenModal = (item) => {
+        setSelectedUser(item);
+        console.log('test', item);
+        setIsOpenModal(!isOpenModal);
+    }
 
+    const deleteUserFromParent = async () => {
+        let response = await deleteUserService(selectedUser.id);
+        if (response && response.data.EC === 0) {
+            await getPaginateData(currentPage, currentLimit);
+            setIsOpenModal(!isOpenModal)
+        }
+    }
 
     const getPaginateData = async (pageCount, limit) => {
         let res = await getPaginateService(pageCount, limit);
@@ -53,7 +68,7 @@ function HomePage(props) {
             <div className='homepage-content mt-5 '>
                 <div className='homepage-title'>Table User</div>
                 <div className="button-group mt-3">
-                    <button className='btn btn-info'>Refresh</button>
+                    <button className='btn btn-light'>Refresh</button>
                     <button className='btn btn-primary'>Create</button>
                 </div>
 
@@ -69,6 +84,7 @@ function HomePage(props) {
                                 <th>Gender</th>
                                 <th>phoneNumber</th>
                                 <th>Group</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -84,6 +100,10 @@ function HomePage(props) {
                                                 <td>{item.gender ? item.gender : 'null'}</td>
                                                 <td>{item.phoneNumber}</td>
                                                 <td>{item.Group ? item.Group.name : 'null'}</td>
+                                                <td className='button-group'>
+                                                    <button onClick={() => changeOpenModal(item)} className='btn btn-light'>Delete</button>
+                                                    <button className='btn btn-primary  '>Edit</button>
+                                                </td>
                                             </tr>
                                         </>
                                     )
@@ -94,6 +114,12 @@ function HomePage(props) {
                         </tbody>
                     </table>
                 </div>
+                <ConfirmDeleteModal
+                    userData={selectedUser}
+                    changeOpenModal={changeOpenModal}
+                    isOpenModal={isOpenModal}
+                    deleteUser={deleteUserFromParent}
+                ></ConfirmDeleteModal>
 
                 <ReactPaginate
                     nextLabel="next >"
@@ -115,7 +141,6 @@ function HomePage(props) {
                     activeClassName="active"
                     renderOnZeroPageCount={null}
                 />
-
 
             </div>
         </div >

@@ -3,7 +3,7 @@
         .button-group {
             display       : flex;
             flex-direction: row;
-            gap           : 10px;
+            gap           : 5px;
 
         }
 
@@ -12,4 +12,8 @@
             font-weight: 600;
         }
     }
+}
+
+.react-responsive-modal-modal {
+    padding: 0 !important;
 }

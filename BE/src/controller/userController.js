@@ -40,12 +40,19 @@ const handleGetUser = async (req, res) => {
 
 const handleDeleteUser = async (req, res) => {
     try {
-        let response = await userService.deleteUserService(req.body.id);
+        let response = await userService.deleteUserService(req.query.id);
         if (response) {
             return res.status(200).json({
                 DT: response.DT,
                 EC: response.EC,
                 EM: response.EM
+            })
+        }
+        else {
+            return res.status(200).json({
+                DT: '',
+                EC: -1,
+                EM: 'err from sever...'
             })
         }
     }
