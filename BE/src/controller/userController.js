@@ -1,8 +1,23 @@
 import userService from '../service/userService'
 
-const handleCreateUser = (req, res) => {
+const handleCreateUser = async (req, res) => {
     try {
-
+        console.log(req.body)
+        let response = await userService.createUserService(req.body);
+        if (response) {
+            return res.status(200).json({
+                DT: '',
+                EC: 0,
+                EM: 'Completed!'
+            })
+        }
+        else {
+            return res.status(200).json({
+                DT: '',
+                EC: -1,
+                EM: 'err from sever...'
+            })
+        }
     }
     catch (e) {
         console.log(e);

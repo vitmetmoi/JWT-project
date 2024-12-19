@@ -1,5 +1,52 @@
 import db from "../models";
 import _ from 'lodash'
+const bcrypt = require('bcryptjs');
+
+let hashPasswordService = (userPassword) => {
+    let salt = bcrypt.genSaltSync(10);
+    let hash = bcrypt.hashSync(userPassword, salt);
+
+    return hash;
+}
+
+const checkValidateEmailService = async (email) => {
+    try {
+        let user = await db.User.findOne({
+            where: { email: email },
+            raw: true
+        });
+        if (user) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    catch (e) {
+        console.log(e);
+    }
+
+}
+
+const checkValidatePhoneNumber = async (phoneNumber) => {
+    try {
+        let user = await db.User.findOne({
+            where: { phoneNumber: phoneNumber },
+            raw: true
+
+        });
+        if (user) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    catch (e) {
+        console.log(e);
+    }
+}
+
 const getUserService = async (type, id) => {
     try {
         if (!type || !id) {
@@ -76,7 +123,34 @@ const createUserService = async (userData) => {
             }
         }
         else {
-            let user = await db.User.create(userData)
+
+            if (checkValidateEmailService(userData.email) === false) {
+                return {
+                    DT: '',
+                    EC: -1,
+                    EM: 'Your email is exist!'
+                }
+            }
+
+            if (checkValidatePhoneNumber(userData.phoneNumber) === false) {
+                return {
+                    DT: '',
+                    EC: -1,
+                    EM: 'Your phone number is exist!'
+                }
+            }
+
+            let hashPassword = hashPasswordService(userData.password);
+
+            let user = await db.User.create({
+                userName: userData.userName,
+                email: userData.email,
+                phoneNumber: userData.phoneNumber,
+                gender: userData.genderId,
+                groupId: userData.groupId,
+                password: hashPassword
+            })
+
             if (user) {
                 return {
                     DT: '',
