@@ -20,7 +20,7 @@ function ConfirmDeleteModal(props) {
                         <p>Are you sure want to delete {props.userData.userName} : {props.userData.email ? props.userData.email : ''} ?.</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fuck</button>
+                        <button onClick={props.changeOpenModal} type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fuck</button>
                         <button onClick={props.deleteUser} type="button" class="btn btn-primary">Yes</button>
                     </div>
                 </div>

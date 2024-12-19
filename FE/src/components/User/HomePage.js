@@ -5,7 +5,7 @@ import './HomePage.scss';
 import { getUserService, getPaginateService, deleteUserService } from '../../service/userService';
 import ReactPaginate from 'react-paginate';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
-
+import CreateUserModal from './CreateUserModal';
 function Items({ currentItems }) {
     return (
         <div className="items">
@@ -29,7 +29,10 @@ function HomePage(props) {
     const [totalPages, setTotalPages] = useState(0);
     const [listUsers, setListUsers] = useState([]);
     const [isOpenModal, setIsOpenModal] = useState(false);
+    const [isOpenModalUser, setIsOpenModalUser] = useState(false);
     const [selectedUser, setSelectedUser] = useState('');
+
+
     useEffect(() => {
         getPaginateData(currentPage, currentLimit);
     }, [currentPage]);
@@ -41,8 +44,11 @@ function HomePage(props) {
 
     const changeOpenModal = (item) => {
         setSelectedUser(item);
-        console.log('test', item);
         setIsOpenModal(!isOpenModal);
+    }
+
+    const changeOpenModalUser = () => {
+        setIsOpenModalUser(!isOpenModalUser)
     }
 
     const deleteUserFromParent = async () => {
@@ -50,6 +56,7 @@ function HomePage(props) {
         if (response && response.data.EC === 0) {
             await getPaginateData(currentPage, currentLimit);
             setIsOpenModal(!isOpenModal)
+            console.log("asd")
         }
     }
 
@@ -69,7 +76,9 @@ function HomePage(props) {
                 <div className='homepage-title'>Table User</div>
                 <div className="button-group mt-3">
                     <button className='btn btn-light'>Refresh</button>
-                    <button className='btn btn-primary'>Create</button>
+                    <button
+                        onClick={() => changeOpenModalUser()}
+                        className='btn btn-primary'>Create</button>
                 </div>
 
                 <div class="table-responsive mt-1">
@@ -120,7 +129,10 @@ function HomePage(props) {
                     isOpenModal={isOpenModal}
                     deleteUser={deleteUserFromParent}
                 ></ConfirmDeleteModal>
-
+                <CreateUserModal
+                    changeOpenModalUser={changeOpenModalUser}
+                    isOpenModalUser={isOpenModalUser}
+                ></CreateUserModal>
                 <ReactPaginate
                     nextLabel="next >"
                     onPageChange={handlePageClick}
