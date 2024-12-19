@@ -50,8 +50,9 @@ function HomePage(props) {
         if (response && response.data.EC === 0) {
             await getPaginateData(currentPage, currentLimit);
             setIsOpenModal(!isOpenModal)
+            console.log("asd")
         }
-    }''
+    }
 
     const getPaginateData = async (pageCount, limit) => {
         let res = await getPaginateService(pageCount, limit);
