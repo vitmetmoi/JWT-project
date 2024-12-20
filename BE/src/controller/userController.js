@@ -2,13 +2,13 @@ import userService from '../service/userService'
 
 const handleCreateUser = async (req, res) => {
     try {
-        console.log(req.body)
+
         let response = await userService.createUserService(req.body);
         if (response) {
             return res.status(200).json({
-                DT: '',
-                EC: 0,
-                EM: 'Completed!'
+                DT: response.DT,
+                EC: response.EC,
+                EM: response.EM
             })
         }
         else {
@@ -83,7 +83,9 @@ const handleDeleteUser = async (req, res) => {
 
 const handleEditUser = async (req, res) => {
     try {
-        let response = await userService.editUserService(req.body.userData);
+        let userData = req.body;
+        console.log(userData)
+        let response = await userService.editUserService(userData);
         if (response) {
             return res.status(200).json({
                 DT: response.DT,

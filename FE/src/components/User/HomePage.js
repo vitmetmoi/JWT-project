@@ -5,7 +5,7 @@ import './HomePage.scss';
 import { getUserService, getPaginateService, deleteUserService } from '../../service/userService';
 import ReactPaginate from 'react-paginate';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
-import CreateUserModal from './CreateUserModal';
+import UserModal from './UserModal';
 function Items({ currentItems }) {
     return (
         <div className="items">
@@ -31,7 +31,7 @@ function HomePage(props) {
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isOpenModalUser, setIsOpenModalUser] = useState(false);
     const [selectedUser, setSelectedUser] = useState('');
-
+    const [modalAction, setModalAction] = useState('');
 
     useEffect(() => {
         getPaginateData(currentPage, currentLimit);
@@ -47,7 +47,12 @@ function HomePage(props) {
         setIsOpenModal(!isOpenModal);
     }
 
-    const changeOpenModalUser = () => {
+    const changeOpenModalUser = (action, data) => {
+        setModalAction(action);
+        if (action === 'EDIT') {
+            setSelectedUser(data);
+            console.log('check data prev', data);
+        }
         setIsOpenModalUser(!isOpenModalUser)
     }
 
@@ -68,6 +73,17 @@ function HomePage(props) {
         }
 
     }
+
+    const getPaginateDataFromParent = async () => {
+        let res = await getPaginateService(currentPage, currentLimit);
+        if (res && res.data && res.data.DT.totalPages) {
+            setTotalPages(res.data.DT.totalPages);
+            setListUsers(res.data.DT.users)
+        }
+
+    }
+
+
 
 
     return (
@@ -102,7 +118,7 @@ function HomePage(props) {
                                     return (
                                         <>
                                             <tr>
-                                                <td>{index + 1}</td>
+                                                <td>{index + 1 + (currentPage - 1) * currentLimit}</td>
                                                 <td>{item.id}</td>
                                                 <td>{item.email}</td>
                                                 <td>{item.userName}</td>
@@ -111,7 +127,7 @@ function HomePage(props) {
                                                 <td>{item.Group ? item.Group.name : 'null'}</td>
                                                 <td className='button-group'>
                                                     <button onClick={() => changeOpenModal(item)} className='btn btn-light'>Delete</button>
-                                                    <button className='btn btn-primary  '>Edit</button>
+                                                    <button onClick={() => changeOpenModalUser('EDIT', item)} className='btn btn-primary  '>Edit</button>
                                                 </td>
                                             </tr>
                                         </>
@@ -129,10 +145,13 @@ function HomePage(props) {
                     isOpenModal={isOpenModal}
                     deleteUser={deleteUserFromParent}
                 ></ConfirmDeleteModal>
-                <CreateUserModal
+                <UserModal
+                    userData={selectedUser}
+                    action={modalAction}
                     changeOpenModalUser={changeOpenModalUser}
                     isOpenModalUser={isOpenModalUser}
-                ></CreateUserModal>
+                    getPaginateDataFromParent={getPaginateDataFromParent}
+                ></UserModal>
                 <ReactPaginate
                     nextLabel="next >"
                     onPageChange={handlePageClick}

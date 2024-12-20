@@ -56,6 +56,7 @@ let createNewUserService = async (userData) => {
         let emailIsValid = await checkValidateEmailService(userData.email);
         let phoneNumberIsValid = await checkValidatePhoneNumber(userData.phoneNumber);
         if (emailIsValid === false) {
+
             return {
                 DT: "email",
                 EC: -1,
