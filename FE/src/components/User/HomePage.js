@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import _ from 'lodash';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import './HomePage.scss';
-import { getUserService, getPaginateService, deleteUserService } from '../../service/userService';
+import { getUserService, getPaginateService, deleteUserService } from '../../service/userService'
 import ReactPaginate from 'react-paginate';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
 import UserModal from './UserModal';

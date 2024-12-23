@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import './Login.scss';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { loginService } from '../../service/userService';
+import { loginService } from '../../service/userService'
 const Login = (props) => {
     let history = useHistory();
     const [loginValue, setLoginValue] = useState('');

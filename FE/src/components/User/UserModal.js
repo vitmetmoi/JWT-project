@@ -4,7 +4,7 @@ import { Modal } from 'react-responsive-modal';
 import './UserModal.scss';
 import _ from 'lodash'
 import { ToastContainer, toast } from 'react-toastify';
-import { createUserService, editUserService } from '../../service/userService';
+import { createUserService, editUserService } from '../../service/userService'
 function UserModal(props) {
 
     const defaultFormState = {
