@@ -6,7 +6,7 @@ import configCors from './config/cors'
 import initApiRoutes from './routes/api'
 require('dotenv').config();
 const app = express();
-
+import JWTService from './middleware/JWTservice'
 
 //configCors
 configCors(app);
@@ -27,6 +27,8 @@ initApiRoutes(app);
 //connect to database
 connectToDataBase();
 
+JWTService.createToken();
+JWTService.verifyToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQmFvRHV5IiwiaWF0IjoxNzM0OTQ1MzA0fQ.d5ePl7HZP1kuHdqAnp3lboTU_mrez-1CxAR_8t3pJeA', process.env.JWT_SECRET)
 
 const PORT = process.env.PORT || 8080;
 
