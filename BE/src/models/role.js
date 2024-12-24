@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
+
         }
     }
     Role.init({
@@ -19,5 +20,6 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         modelName: 'Role',
     });
+    Role.sync({ alter: true })
     return Role;
 };

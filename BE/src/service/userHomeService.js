@@ -1,10 +1,10 @@
 const bcrypt = require('bcryptjs');
-import mysql from 'mysql2/promise';
-import bluebird, { resolve } from 'bluebird';
+import mysql, { raw } from 'mysql2/promise';
+import bluebird, { reject, resolve } from 'bluebird';
 import db from '../models/index'
 import { Op } from 'sequelize';
 import JWTservice from '../middleware/JWTservice'
-
+require('dotenv').config();
 
 let hashPasswordService = (userPassword) => {
     let salt = bcrypt.genSaltSync(10);
@@ -91,6 +91,50 @@ let createNewUserService = async (userData) => {
     }
 }
 
+const findGroupWithRole = async (user) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (user) {
+                let group = user.groupId;
+
+                let groupRoles = await db.Group_Role.findAll({
+                    where: { groupId: group },
+                    raw: true
+                })
+
+                let data = [];
+
+                for (let i = 0; i < Object.keys(groupRoles).length; i++) {
+                    let roleId = groupRoles[i].roleId;
+
+                    let role = await db.Role.findOne({
+                        where: { id: roleId },
+                        raw: true
+                    })
+                    if (role) {
+                        data.push(role)
+                    }
+                }
+
+
+
+                if (data) {
+                    resolve(data);
+                }
+
+            }
+        }
+
+        catch (e) {
+            reject(e);
+        }
+
+    })
+
+
+
+}
+
 const loginUserService = async (userData) => {
     try {
 
@@ -101,12 +145,14 @@ const loginUserService = async (userData) => {
         })
 
         if (user) {
+            let roles = await findGroupWithRole(user);
             let result = bcrypt.compareSync(userData.password, user.password);
 
             if (result === true) {
                 let payload = {
                     email: user.email,
-
+                    role: roles,
+                    expiresIn: process.env.JWT_EXPIRES_IN
                 }
                 let access_token = JWTservice.createToken(payload);
                 return {
