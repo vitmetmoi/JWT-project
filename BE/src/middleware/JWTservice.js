@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 require('dotenv').config();
 
-const createToken = () => {
+const createToken = (data) => {
     let payload = { name: 'BaoDuy' };
     let key = process.env.JWT_SECRET;
     try {
@@ -15,8 +15,9 @@ const createToken = () => {
     return token;
 }
 
-const verifyToken = (token, key) => {
+const verifyToken = (token) => {
     let data = null;
+    let key = process.env.JWT_SECRET
     try {
         let decoded = jwt.verify(token, key);
         if (decoded) {
@@ -31,9 +32,38 @@ const verifyToken = (token, key) => {
 
 }
 
+const checkUserJWT = (req, res, next) => {
+    let cookies = req.cookies;
+
+    if (cookies && cookies.jwt) {
+        console.log('my jwt', cookies.jwt);
+        let token = cookies.jwt;
+        let decoded = verifyToken(token);
+        if (decoded) {
+            next();
+        }
+        else {
+            return res.status(401).json({
+                EC: 401,
+                DT: '',
+                EM: 'Authenticated denine!'
+            })
+        }
+    }
+
+
+    else {
+        return res.status(401).json({
+            EC: 401,
+            DT: '',
+            EM: 'Authenticated denine!'
+        })
+    }
+}
+
 
 
 module.exports = {
-    createToken, verifyToken
+    createToken, verifyToken, checkUserJWT
 }
 

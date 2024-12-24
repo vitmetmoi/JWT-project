@@ -6,19 +6,27 @@ import configCors from './config/cors'
 import initApiRoutes from './routes/api'
 require('dotenv').config();
 const app = express();
-import JWTService from './middleware/JWTservice'
+import JWTService from './middleware/JWTservice';
+var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser')
+
+
 
 //configCors
 configCors(app);
 
 //config view engine
 configViewEngine(app);
-var bodyParser = require('body-parser')
+
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }))
 
 // parse application/json
 app.use(bodyParser.json())
+
+//cookie parse
+app.use(cookieParser())
+
 //init web routes
 initWebRoutes(app);
 
@@ -27,8 +35,6 @@ initApiRoutes(app);
 //connect to database
 connectToDataBase();
 
-JWTService.createToken();
-JWTService.verifyToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQmFvRHV5IiwiaWF0IjoxNzM0OTQ1MzA0fQ.d5ePl7HZP1kuHdqAnp3lboTU_mrez-1CxAR_8t3pJeA', process.env.JWT_SECRET)
 
 const PORT = process.env.PORT || 8080;
 
