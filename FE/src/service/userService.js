@@ -1,26 +1,29 @@
-const axios = require('axios');
+import axios from '../setup/axios'
 
-const createUserService = async (userData) => {
-    return await axios.post('http://localhost:8080/api/createUser', { ...userData })
+export const createUserService = (userData) => {
+    return axios.post('/createUser', { ...userData })
 }
 
-const loginService = async (userData) => {
-    return await axios.post('http://localhost:8080/api/login', userData)
+export const loginService = (userData) => {
+    return axios.post('/login', userData)
 }
 
-const getUserService = async (type, id) => {
-    return await axios.get(`http://localhost:8080/api/getUser?type=${type}&id=${id}`)
+export const getUserService = (type, id) => {
+    return axios.get(`/getUser?type=${type}&id=${id}`)
 }
 
-const getPaginateService = async (currentPage, limit) => {
-    return await axios.get(`http://localhost:8080/api/getPaginate?currentPage=${currentPage}&limit=${limit}`)
+export const getPaginateService = (currentPage, limit) => {
+    return axios.get(`/getPaginate?currentPage=${currentPage}&limit=${limit}`)
 }
 
-const deleteUserService = async (id) => {
-    return await axios.delete(`http://localhost:8080/api/deleteUser?id=${id}`)
+export const deleteUserService = (id) => {
+    return axios.delete(`/deleteUser?id=${id}`)
 }
 
-
-module.exports = {
-    createUserService, loginService, getUserService, getPaginateService, deleteUserService
+export const editUserService = (userData) => {
+    return axios.put('/editUser', { ...userData })
 }
+
+// module.exports = {
+//     createUserService, loginService, getUserService, getPaginateService, deleteUserService, editUserService
+// }

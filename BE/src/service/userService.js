@@ -1,5 +1,5 @@
 import db from "../models";
-import _ from 'lodash'
+import _, { orderBy } from 'lodash'
 const bcrypt = require('bcryptjs');
 
 let hashPasswordService = (userPassword) => {
@@ -15,6 +15,8 @@ const checkValidateEmailService = async (email) => {
             where: { email: email },
             raw: true
         });
+        console.log(user);
+
         if (user) {
             return false;
         }
@@ -35,6 +37,7 @@ const checkValidatePhoneNumber = async (phoneNumber) => {
             raw: true
 
         });
+        console.log("check user phone", user);
         if (user) {
             return false;
         }
@@ -123,8 +126,12 @@ const createUserService = async (userData) => {
             }
         }
         else {
+            let checkEmail = await checkValidateEmailService(userData.email);
+            let checkPhone = await checkValidatePhoneNumber(userData.phoneNumber);
+            console.log(checkEmail)
+            if (checkEmail === false) {
 
-            if (checkValidateEmailService(userData.email) === false) {
+                console.log('test 1');
                 return {
                     DT: '',
                     EC: -1,
@@ -132,39 +139,44 @@ const createUserService = async (userData) => {
                 }
             }
 
-            if (checkValidatePhoneNumber(userData.phoneNumber) === false) {
+            else if (checkPhone === false) {
+                console.log('test 2');
                 return {
                     DT: '',
                     EC: -1,
                     EM: 'Your phone number is exist!'
                 }
             }
-
-            let hashPassword = hashPasswordService(userData.password);
-
-            let user = await db.User.create({
-                userName: userData.userName,
-                email: userData.email,
-                phoneNumber: userData.phoneNumber,
-                gender: userData.genderId,
-                groupId: userData.groupId,
-                password: hashPassword
-            })
-
-            if (user) {
-                return {
-                    DT: '',
-                    EC: -1,
-                    EM: 'Completed!'
-                }
-            }
             else {
-                return {
-                    DT: '',
-                    EC: -1,
-                    EM: 'Error from sever service!'
+                console.log('test 3');
+                let hashPassword = hashPasswordService(userData.password);
+
+                let user = await db.User.create({
+                    userName: userData.userName,
+                    email: userData.email,
+                    phoneNumber: userData.phoneNumber,
+                    gender: userData.genderId,
+                    groupId: userData.groupId,
+                    password: hashPassword
+                })
+
+                if (user) {
+                    return {
+                        DT: '',
+                        EC: 0,
+                        EM: 'Completed!'
+                    }
                 }
+                else {
+                    return {
+                        DT: '',
+                        EC: -1,
+                        EM: 'Error from sever service!'
+                    }
+                }
+
             }
+
         }
     }
     catch (e) {
@@ -220,7 +232,7 @@ const editUserService = async (userData) => {
                 user.email = userData.email;
                 user.userName = userData.userName;
                 user.phoneNumber = userData.phoneNumber;
-                user.gender = userData.gender;
+                user.gender = userData.genderId;
                 user.groupId = userData.groupId
 
                 await user.save();
@@ -265,6 +277,7 @@ const getPaginateService = async (currentPage, limit) => {
                 nest: true,
                 offset: offSet,
                 limit: +limit,
+                order: [['id', 'DESC']]
             })
             let totalPages = Math.ceil(count / limit)
             let data = {

@@ -24,8 +24,9 @@ const handleDeleteUser = async (req, res) => {
 }
 
 const handleGetAllUsers = async (req, res) => {
+
     let users = await userService.getAllUsersService();
-    console.log(users);
+
     return res.send('done')
 }
 
@@ -66,7 +67,11 @@ const handleRegister = async (req, res) => {
 const handleLogin = async (req, res) => {
     try {
         let data = req.body;
+
         let result = await userService.loginUserService(data);
+
+        res.cookie('jwt', result.DT, { httpOnly: true, maxAge: 60 * 60 * 1000 })
+        console.log(result)
         return res.status(200).json({
             DT: result.DT,
             EM: result.EM,

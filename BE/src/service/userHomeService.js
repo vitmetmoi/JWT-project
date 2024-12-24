@@ -3,7 +3,7 @@ import mysql from 'mysql2/promise';
 import bluebird, { resolve } from 'bluebird';
 import db from '../models/index'
 import { Op } from 'sequelize';
-
+import JWTservice from '../middleware/JWTservice'
 
 
 let hashPasswordService = (userPassword) => {
@@ -56,6 +56,7 @@ let createNewUserService = async (userData) => {
         let emailIsValid = await checkValidateEmailService(userData.email);
         let phoneNumberIsValid = await checkValidatePhoneNumber(userData.phoneNumber);
         if (emailIsValid === false) {
+
             return {
                 DT: "email",
                 EC: -1,
@@ -101,9 +102,15 @@ const loginUserService = async (userData) => {
 
         if (user) {
             let result = bcrypt.compareSync(userData.password, user.password);
+
             if (result === true) {
+                let payload = {
+                    email: user.email,
+
+                }
+                let access_token = JWTservice.createToken(payload);
                 return {
-                    DT: '',
+                    DT: access_token,
                     EC: 0,
                     EM: "Done"
                 }
@@ -148,7 +155,7 @@ let getAllUsersService = async () => {
             raw: true,
             nest: true
         })
-        console.log("checkk users", roles);
+
         // console.log("checkk users", users);
         return users;
     }
