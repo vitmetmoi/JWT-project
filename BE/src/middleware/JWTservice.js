@@ -56,7 +56,7 @@ const checkUserJWT = (req, res, next) => {
             }
             else {
                 let canAccess = roles.some(item => { return item.url === path })
-                console.log('canacc', canAccess)
+
                 if (canAccess === true) {
                     next();
                 }
@@ -64,7 +64,7 @@ const checkUserJWT = (req, res, next) => {
                     return res.status(403).json({
                         EC: 401,
                         DT: '',
-                        EM: 'You dont have permistion to access!'
+                        EM: 'You dont have permitsion to access this resource!'
                     })
                 }
             }
