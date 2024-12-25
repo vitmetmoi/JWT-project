@@ -95,31 +95,19 @@ const findGroupWithRole = async (user) => {
     return new Promise(async (resolve, reject) => {
         try {
             if (user) {
-                let group = user.groupId;
+                let groupId = user.groupId;
 
-                let groupRoles = await db.Group_Role.findAll({
-                    where: { groupId: group },
-                    raw: true
+
+                let groupRoles = await db.Group.findOne({
+                    include: [{
+                        model: db.Role,
+                        attributes: ['id', 'url', 'description'],
+                        through: {}
+                    }]
                 })
 
-                let data = [];
-
-                for (let i = 0; i < Object.keys(groupRoles).length; i++) {
-                    let roleId = groupRoles[i].roleId;
-
-                    let role = await db.Role.findOne({
-                        where: { id: roleId },
-                        raw: true
-                    })
-                    if (role) {
-                        data.push(role)
-                    }
-                }
-
-
-
-                if (data) {
-                    resolve(data);
+                if (groupRoles) {
+                    resolve(groupRoles);
                 }
 
             }

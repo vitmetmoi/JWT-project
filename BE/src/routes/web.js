@@ -13,6 +13,7 @@ const router = express.Router();
 const initWebRoutes = (app) => {
     router.all('*', JWTservice.checkUserJWT, JWTservice.checkUserPermission);
 
+
     router.get("/", homeController.handleHelloWorld)
     router.post("/user/create-user", homeController.handleCreateUser)
     router.get('/user/get-all-users', homeController.handleGetAllUsers)

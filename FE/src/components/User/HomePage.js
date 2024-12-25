@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import _ from 'lodash';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import './HomePage.scss';
@@ -6,21 +6,13 @@ import { getUserService, getPaginateService, deleteUserService } from '../../ser
 import ReactPaginate from 'react-paginate';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
 import UserModal from './UserModal';
-function Items({ currentItems }) {
-    return (
-        <div className="items">
-            {currentItems && currentItems.map((item) => (
-                <div>
-                    <h3>Item #{item}</h3>
-                </div>
-            ))}
-        </div>
-    );
-}
+import { UserContext } from '../../store/UserContext';
+
 
 function HomePage(props) {
 
-
+    const { user, login, logout } = useContext(UserContext);
+    console.log('user', user);
     let itemsPerPage = 3;
     const items = [...Array(33).keys()];
 

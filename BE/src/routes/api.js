@@ -12,7 +12,7 @@ const router = express.Router();
 
 
 const initApiRoutes = (app) => {
-    router.all('*', JWTservice.checkUserJWT, JWTservice.checkUserPermission);
+
 
     router.post('/register', homeController.handleRegister)
     router.post('/login', homeController.handleLogin)

@@ -36,15 +36,22 @@ const verifyToken = (token) => {
 
 const checkUserJWT = (req, res, next) => {
     try {
-        let cookies = req.cookies;
-        let token = cookies.jwt;
-        console.log(req.path);
-        const nonSecurePaths = ['/', '/api/login', '/api/register', '/login', '/register'];
+
+
+        console.log('prev path', req.path);
+        const nonSecurePaths = ['/', '/api/login', '/api/create', '/login', '/register', '/createUser', '/api/createUser'];
         if (nonSecurePaths.includes(req.path)) return next();
 
+        let cookies = req.cookies;
+
+        let token = cookies.jwt.accessToken;
+
         if (token) {
+
             let decoded = verifyToken(token);
+
             if (decoded) {
+
                 req.user = decoded;
                 next();
             }
@@ -78,17 +85,17 @@ const checkUserJWT = (req, res, next) => {
 const checkUserPermission = (req, res, next) => {
     let cookies = req.cookies;
     let path = req.path;
-
-    const nonSecurePaths = ['/', '/api/login', '/api/register', '/login', '/register'];
+    console.log('cookie', cookies)
+    const nonSecurePaths = ['/', '/api/login', '/api/create', '/login', '/register', '/createUser', '/api/createUser'];
     if (nonSecurePaths.includes(req.path)) return next();
 
     if (cookies && cookies.jwt) {
 
-        let token = cookies.jwt;
+        let token = cookies.jwt.accessToken;
         let decoded = verifyToken(token);
         if (decoded) {
 
-            let roles = decoded.role;
+            let roles = decoded.role.Roles;
             console.log('roles', roles);
             console.log('path', path)
             if (!roles || roles.length === 0) {
@@ -100,7 +107,7 @@ const checkUserPermission = (req, res, next) => {
             }
             else {
                 let canAccess = roles.some(item => { return item.url === path })
-
+                console.log(canAccess)
                 if (canAccess === true) {
                     next();
                 }
