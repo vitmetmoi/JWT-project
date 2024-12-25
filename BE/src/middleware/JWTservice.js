@@ -35,8 +35,52 @@ const verifyToken = (token) => {
 }
 
 const checkUserJWT = (req, res, next) => {
+    try {
+        let cookies = req.cookies;
+        let token = cookies.jwt;
+        console.log(req.path);
+        const nonSecurePaths = ['/', '/api/login', '/api/register', '/login', '/register'];
+        if (nonSecurePaths.includes(req.path)) return next();
+
+        if (token) {
+            let decoded = verifyToken(token);
+            if (decoded) {
+                req.user = decoded;
+                next();
+            }
+            else {
+                return res.status(403).json({
+                    EC: 401,
+                    DT: '',
+                    EM: 'You dont have permistion to access!'
+                })
+            }
+        }
+        else {
+            return res.status(403).json({
+                EC: 401,
+                DT: '',
+                EM: 'You dont have permistion to access!'
+            })
+        }
+    }
+    catch (e) {
+        return res.status(403).json({
+            EC: 401,
+            DT: '',
+            EM: 'You dont have permistion to access!'
+        })
+    }
+
+
+}
+
+const checkUserPermission = (req, res, next) => {
     let cookies = req.cookies;
     let path = req.path;
+
+    const nonSecurePaths = ['/', '/api/login', '/api/register', '/login', '/register'];
+    if (nonSecurePaths.includes(req.path)) return next();
 
     if (cookies && cookies.jwt) {
 
@@ -91,6 +135,6 @@ const checkUserJWT = (req, res, next) => {
 
 
 module.exports = {
-    createToken, verifyToken, checkUserJWT
+    createToken, verifyToken, checkUserJWT, checkUserPermission
 }
 

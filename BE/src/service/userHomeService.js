@@ -156,7 +156,10 @@ const loginUserService = async (userData) => {
                 }
                 let access_token = JWTservice.createToken(payload);
                 return {
-                    DT: access_token,
+                    DT: {
+                        accessToken: access_token,
+                        groupWithRoles: payload.role
+                    },
                     EC: 0,
                     EM: "Done"
                 }

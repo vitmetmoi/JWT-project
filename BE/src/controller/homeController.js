@@ -69,9 +69,9 @@ const handleLogin = async (req, res) => {
         let data = req.body;
 
         let result = await userService.loginUserService(data);
-
-        res.cookie('jwt', result.DT, { httpOnly: true, maxAge: 60 * 60 * 1000 })
-        console.log(result)
+        if (result && result.DT && result.EC === 0) {
+            res.cookie('jwt', result.DT, { httpOnly: true, maxAge: 60 * 60 * 1000 })
+        }
         return res.status(200).json({
             DT: result.DT,
             EM: result.EM,
