@@ -128,8 +128,32 @@ const handleGetPaginate = async (req, res) => {
     }
 }
 
+const handleGetAccount = async (req, res) => {
+    try {
+        let user = req.user;
+        console.log('userData', user);
+        let response = await userService.getAccount(user);
+        if (response) {
+            return res.status(200).json({
+                DT: response.DT,
+                EC: response.EC,
+                EM: response.EM
+            })
+        }
+    }
+    catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            DT: '',
+            EC: -1,
+            EM: 'err from sever...'
+        })
+
+    }
+}
+
 
 
 module.exports = {
-    handleCreateUser, handleGetUser, handleDeleteUser, handleEditUser, handleGetPaginate
+    handleCreateUser, handleGetUser, handleDeleteUser, handleEditUser, handleGetPaginate, handleGetAccount
 }

@@ -1,12 +1,14 @@
 import jwt from 'jsonwebtoken'
 require('dotenv').config();
 
+const nonSecurePaths = ['/', '/api/login', '/api/create', '/login', '/register', '/createUser', '/api/createUser', '/api/account'];
+
 const createToken = (payload) => {
 
     let key = process.env.JWT_SECRET;
     try {
         var token = jwt.sign(payload, key);
-        console.log(token)
+        console.log('login token', token)
     }
     catch (e) {
         console.log(e);
@@ -39,8 +41,8 @@ const checkUserJWT = (req, res, next) => {
 
 
         console.log('prev path', req.path);
-        const nonSecurePaths = ['/', '/api/login', '/api/create', '/login', '/register', '/createUser', '/api/createUser'];
-        if (nonSecurePaths.includes(req.path)) return next();
+
+        if (nonSecurePaths.includes(req.path) && req.path !== '/api/account') return next();
 
         let cookies = req.cookies;
 
@@ -86,7 +88,7 @@ const checkUserPermission = (req, res, next) => {
     let cookies = req.cookies;
     let path = req.path;
     console.log('cookie', cookies)
-    const nonSecurePaths = ['/', '/api/login', '/api/create', '/login', '/register', '/createUser', '/api/createUser'];
+
     if (nonSecurePaths.includes(req.path)) return next();
 
     if (cookies && cookies.jwt) {

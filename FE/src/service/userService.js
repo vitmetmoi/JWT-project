@@ -23,6 +23,9 @@ export const deleteUserService = (id) => {
 export const editUserService = (userData) => {
     return axios.put('/editUser', { ...userData })
 }
+export const getUserAccountService = () => {
+    return axios.get(`/account`)
+}
 
 // module.exports = {
 //     createUserService, loginService, getUserService, getPaginateService, deleteUserService, editUserService

@@ -17,7 +17,7 @@ const Login = (props) => {
 
     const { user, login, logout } = useContext(UserContext);
     useEffect(() => {
-        sessionStorage.removeItem("account");
+
     }, [])
 
     const validateInput = () => {
@@ -52,9 +52,9 @@ const Login = (props) => {
                     isAuthentication: true,
                     token: "fake_token1233123123123"
                 }
-                sessionStorage.setItem('account', JSON.stringify(data));
+
                 history.push('/user');
-                window.location.reload();
+
             }
             else {
                 toast.warn(res.data.EM);

@@ -9,19 +9,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import _ from 'lodash'
 import AppRoute from './routes/AppRoute';
 function App() {
-  const [account, setAccount] = useState('');
-  useEffect(() => {
-    let session = sessionStorage.getItem("account");
-    if (session) {
-      setAccount(session);
-    }
-  }, [account])
-
 
   return (
     <Router>
       <div className="App">
-        <div className='App-header'>{account && !_.isEmpty(account) && <Nav></Nav>}</div>
+        <div className='App-header'><Nav></Nav></div>
         <div className='App-body'>
           <AppRoute></AppRoute>
         </div>
