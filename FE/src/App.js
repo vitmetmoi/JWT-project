@@ -1,5 +1,5 @@
 import './App.scss';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Nav from './components/Navigation/Nav';
 import {
   BrowserRouter as Router,
@@ -8,44 +8,69 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import _ from 'lodash'
 import AppRoute from './routes/AppRoute';
+import { Triangle } from 'react-loader-spinner'
+import { UserContext } from './store/UserContext';
+
+
 function App() {
-  const [account, setAccount] = useState('');
-  useEffect(() => {
-    let session = sessionStorage.getItem("account");
-    if (session) {
-      setAccount(session);
-    }
-  }, [account])
+  const { user, login, logout } = useContext(UserContext);
 
-
-  return (
-    <Router>
-      <div className="App">
-        <div className='App-header'>{account && !_.isEmpty(account) && <Nav></Nav>}</div>
-        <div className='App-body'>
-          <AppRoute></AppRoute>
+  if (user.isLoading === true) {
+    return (
+      <>
+        <div className='loading-page-container'>
+          <Triangle
+            visible={true}
+            height="80"
+            width="80"
+            color="#6495ED"
+            ariaLabel="triangle-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+          ></Triangle>
+          <span className='loading-text'>Loading data...</span>
         </div>
 
-
-        <ToastContainer
-          position="bottom-right"
-          autoClose={5000}
-          hideProgressBar={true}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
+      </>
+    )
 
 
-      </div>
-    </Router>
+  }
+  else {
+    return (
+      <Router>
+
+        <div className="App">
+          <div className='App-header'><Nav></Nav></div>
+          <div className='App-body'>
+            <AppRoute></AppRoute>
+          </div>
 
 
-  );
+          <ToastContainer
+            position="bottom-right"
+            autoClose={5000}
+            hideProgressBar={true}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
+
+
+        </div>
+      </Router>
+
+
+    );
+  }
+
+
 }
+
+
 
 export default App;

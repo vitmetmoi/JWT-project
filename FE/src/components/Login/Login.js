@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { useHistory } from "react-router-dom";
 import './Login.scss';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { loginService } from '../../service/userService'
+import { UserContext } from '../../store/UserContext';
 const Login = (props) => {
     let history = useHistory();
     const [loginValue, setLoginValue] = useState('');
@@ -14,9 +15,9 @@ const Login = (props) => {
     }
     const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
 
-
+    const { user, login, logout } = useContext(UserContext);
     useEffect(() => {
-        sessionStorage.removeItem("account");
+
     }, [])
 
     const validateInput = () => {
@@ -44,13 +45,16 @@ const Login = (props) => {
 
 
             if (res.data && res.data.EC === 0) {
+                login(res.data.DT);
+                console.log('res', res.data.DT)
+
                 let data = {
                     isAuthentication: true,
                     token: "fake_token1233123123123"
                 }
-                sessionStorage.setItem('account', JSON.stringify(data));
+
                 history.push('/user');
-                window.location.reload();
+
             }
             else {
                 toast.warn(res.data.EM);

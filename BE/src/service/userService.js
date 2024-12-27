@@ -314,6 +314,29 @@ const getPaginateService = async (currentPage, limit) => {
 
 }
 
+const getAccount = async (userData) => {
+    try {
+        if (!userData) {
+            return {
+                DT: '',
+                EC: -1,
+                EM: 'Missing parameter!'
+            }
+        }
+        else {
+
+            return {
+                DT: userData,
+                EC: 0,
+                EM: 'Done!'
+            }
+        }
+    }
+    catch (e) {
+        console.log(e);
+    }
+}
+
 module.exports = {
-    getUserService, createUserService, deleteUserService, editUserService, getPaginateService
+    getUserService, createUserService, deleteUserService, editUserService, getPaginateService, getAccount
 }

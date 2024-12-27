@@ -1,10 +1,10 @@
 const bcrypt = require('bcryptjs');
-import mysql from 'mysql2/promise';
-import bluebird, { resolve } from 'bluebird';
+import mysql, { raw } from 'mysql2/promise';
+import bluebird, { reject, resolve } from 'bluebird';
 import db from '../models/index'
 import { Op } from 'sequelize';
 import JWTservice from '../middleware/JWTservice'
-
+require('dotenv').config();
 
 let hashPasswordService = (userPassword) => {
     let salt = bcrypt.genSaltSync(10);
@@ -91,6 +91,38 @@ let createNewUserService = async (userData) => {
     }
 }
 
+const findGroupWithRole = async (user) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (user) {
+                let groupId = user.groupId;
+
+
+                let groupRoles = await db.Group.findOne({
+                    include: [{
+                        model: db.Role,
+                        attributes: ['id', 'url', 'description'],
+                        through: {}
+                    }]
+                })
+
+                if (groupRoles) {
+                    resolve(groupRoles);
+                }
+
+            }
+        }
+
+        catch (e) {
+            reject(e);
+        }
+
+    })
+
+
+
+}
+
 const loginUserService = async (userData) => {
     try {
 
@@ -101,16 +133,21 @@ const loginUserService = async (userData) => {
         })
 
         if (user) {
+            let roles = await findGroupWithRole(user);
             let result = bcrypt.compareSync(userData.password, user.password);
 
             if (result === true) {
                 let payload = {
                     email: user.email,
+                    role: roles,
 
                 }
                 let access_token = JWTservice.createToken(payload);
                 return {
-                    DT: access_token,
+                    DT: {
+                        accessToken: access_token,
+                        groupWithRoles: payload.role
+                    },
                     EC: 0,
                     EM: "Done"
                 }

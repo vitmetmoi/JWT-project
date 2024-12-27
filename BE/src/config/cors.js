@@ -1,6 +1,9 @@
-
+var cors = require('cors');
 
 const configCors = (app) => {
+
+    app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+
     app.use(function (req, res, next) {
 
         // Website you wish to allow to connect
@@ -19,6 +22,7 @@ const configCors = (app) => {
         // Pass to next layer of middleware
         next();
     });
+
 
 }
 

@@ -5,6 +5,7 @@ import Register from '../components/Register/Register';
 import UserRoute from './UserRoute';
 import HomePage from '../components/User/HomePage';
 import PrivateRoute from './PrivateRoute';
+import Home from '../components/User/Home'
 function AppRoute(props) {
     return (
         <>
@@ -19,7 +20,7 @@ function AppRoute(props) {
                     <Register></Register>
                 </Route>
                 <Route path="/">
-                    <Login></Login>
+                    <Home></Home>
                 </Route>
             </Switch>
         </>

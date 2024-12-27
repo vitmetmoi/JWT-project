@@ -1,12 +1,17 @@
 import jwt from 'jsonwebtoken'
 require('dotenv').config();
 
-const createToken = (data) => {
-    let payload = { name: 'BaoDuy' };
+const nonSecurePaths = ['/', '/api/login', '/api/create', '/login', '/register', '/createUser', '/api/createUser', '/api/account'];
+
+const createToken = (payload) => {
+
     let key = process.env.JWT_SECRET;
     try {
-        var token = jwt.sign(payload, key);
-        console.log(token)
+
+        var token = jwt.sign(payload, key, {
+            expiresIn: process.env.JWT_EXPIRES_IN
+        });
+
     }
     catch (e) {
         console.log(e);
@@ -18,9 +23,11 @@ const createToken = (data) => {
 const verifyToken = (token) => {
     let data = null;
     let key = process.env.JWT_SECRET
+
     try {
         let decoded = jwt.verify(token, key);
         if (decoded) {
+
             data = decoded
         }
     }
@@ -33,20 +40,94 @@ const verifyToken = (token) => {
 }
 
 const checkUserJWT = (req, res, next) => {
+    try {
+
+        if (nonSecurePaths.includes(req.path) || req.path === '/api/account') return next();
+
+        let cookies = req.cookies;
+
+        let token = cookies.jwt.accessToken;
+
+        if (token) {
+
+            let decoded = verifyToken(token);
+
+
+            if (decoded) {
+
+                req.user = decoded;
+                next();
+            }
+            else {
+                return res.status(403).json({
+                    EC: 401,
+                    DT: '',
+                    EM: 'You dont have permistion to access!'
+                })
+            }
+        }
+        else {
+            return res.status(403).json({
+                EC: 401,
+                DT: '',
+                EM: 'You dont have permistion to access!'
+            })
+        }
+    }
+    catch (e) {
+        return res.status(403).json({
+            EC: 401,
+            DT: '',
+            EM: 'You dont have permistion to access!'
+        })
+    }
+
+
+}
+
+const checkUserPermission = (req, res, next) => {
     let cookies = req.cookies;
+    let path = req.path;
+
+
+    if (nonSecurePaths.includes(req.path)) return next();
 
     if (cookies && cookies.jwt) {
-        console.log('my jwt', cookies.jwt);
-        let token = cookies.jwt;
+
+        let token = cookies.jwt.accessToken;
         let decoded = verifyToken(token);
         if (decoded) {
-            next();
+
+            let roles = decoded.role.Roles;
+            // console.log('roles', roles);
+            // console.log('path', path)
+            if (!roles || roles.length === 0) {
+                return res.status(403).json({
+                    EC: 401,
+                    DT: '',
+                    EM: 'You dont have permistion to access!'
+                })
+            }
+            else {
+                let canAccess = roles.some(item => { return item.url === path })
+                console.log('can access', canAccess)
+                if (canAccess === true) {
+                    next();
+                }
+                else {
+                    return res.status(403).json({
+                        EC: 401,
+                        DT: '',
+                        EM: 'You dont have permitsion to access this resource!'
+                    })
+                }
+            }
         }
         else {
             return res.status(401).json({
                 EC: 401,
                 DT: '',
-                EM: 'Authenticated denine!'
+                EM: 'Authenticated denined!'
             })
         }
     }
@@ -64,6 +145,6 @@ const checkUserJWT = (req, res, next) => {
 
 
 module.exports = {
-    createToken, verifyToken, checkUserJWT
+    createToken, verifyToken, checkUserJWT, checkUserPermission
 }
 
