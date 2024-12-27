@@ -7,8 +7,11 @@ const createToken = (payload) => {
 
     let key = process.env.JWT_SECRET;
     try {
-        var token = jwt.sign(payload, key);
-        console.log('login token', token)
+        console.log(payload)
+        var token = jwt.sign(payload, key, {
+            expiresIn: payload.expiresIn
+        });
+
     }
     catch (e) {
         console.log(e);
@@ -42,7 +45,7 @@ const checkUserJWT = (req, res, next) => {
 
         console.log('prev path', req.path);
 
-        if (nonSecurePaths.includes(req.path) && req.path !== '/api/account') return next();
+        if (nonSecurePaths.includes(req.path) || req.path == '/api/account') return next();
 
         let cookies = req.cookies;
 
@@ -51,6 +54,7 @@ const checkUserJWT = (req, res, next) => {
         if (token) {
 
             let decoded = verifyToken(token);
+
 
             if (decoded) {
 

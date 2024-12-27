@@ -1,34 +1,65 @@
 import { useState, createContext, useEffect } from "react";
 import { getUserAccountService } from "../service/userService";
-const UserContext = createContext({ email: '', groupWithRoles: '', token: '', auth: false });
+const UserContext = createContext(null);
 
 const UserProvider = ({ children }) => {
     // User is the name of the "data" that gets stored in context
-    const [user, setUser] = useState({ email: '', groupWithRoles: '', token: '', auth: false });
+    const [user, setUser] = useState(
+        {
+            token: '',
+            isLoading: true,
+            auth: false,
+            account: {
+                userName: '',
+                email: '',
+                groupWithRoles: '',
+            }
+        }
+
+    );
 
 
     useEffect(() => {
-        getUserAccount();
+        setTimeout(() => getUserAccount(), 3000);
     }, [])
 
     const getUserAccount = async () => {
         let res = await getUserAccountService();
         if (res && res.data.EC === 0) {
-            console.log('set user1', res.data.DT);
-            login(res.data.DT);
+            let data = {
+                token: data.token,
+                isLoading: false,
+                auth: true,
+                account: {
+                    userName: data.userName && data.userName,
+                    email: data.email && data.email,
+                    groupWithRoles: data.groupWithRoles && data.groupWithRoles,
+                }
+            }
+            console.log('set user1', data);
+            login(data);
+        }
+        else {
+            let data = {
+                token: '',
+                isLoading: false,
+                auth: false,
+                account: {
+                    userName: '',
+                    email: '',
+                    groupWithRoles: '',
+                }
+            };
+            console.log('set user1', data);
+            login(data);
         }
 
     }
     // Login updates the user data with a name parameter
     const login = (data) => {
+
         console.log('set user2', data);
-        setUser({
-            ...user,
-            email: data.email,
-            groupWithRoles: data.groupWithRoles,
-            token: data.accessToken,
-            auth: true
-        });
+        setUser(data);
     };
 
     // Logout updates the user data to default

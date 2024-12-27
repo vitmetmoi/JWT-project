@@ -16,15 +16,18 @@ const Nav = (props) => {
 
     console.log('loca', location)
     if (location && location.pathname !== '/login') {
+
+
         return (
             <div className='navigation-container'>
                 <ul>
-                    <li><Link className="active" to="/">Home</Link></li>
+                    <li><Link to="/">Home</Link></li>
                     <li><Link to="/user">Users</Link></li>
                     <li><Link to="/contact">Project</Link></li>
                     <li><Link to="/about">About</Link></li>
                 </ul>
             </div>
+
         );
     }
     else {

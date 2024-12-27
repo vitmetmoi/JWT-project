@@ -29,13 +29,13 @@ axios.interceptors.response.use(function (response) {
         // authentication (token related issues)
         case 401: {
             toast.error("Unauthorized user,please login...")
-            return Promise.reject(error);
+            return error;
         }
 
         // forbidden (permission related issues)
         case 403: {
             toast.error("You dont have permistion to access!")
-            return Promise.reject(error);
+            return error;
         }
 
         // bad request
