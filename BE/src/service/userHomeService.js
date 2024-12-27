@@ -140,7 +140,7 @@ const loginUserService = async (userData) => {
                 let payload = {
                     email: user.email,
                     role: roles,
-                    expiresIn: process.env.JWT_EXPIRES_IN
+
                 }
                 let access_token = JWTservice.createToken(payload);
                 return {

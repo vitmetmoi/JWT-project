@@ -20,7 +20,8 @@ const UserProvider = ({ children }) => {
 
 
     useEffect(() => {
-        setTimeout(() => getUserAccount(), 3000);
+
+        setTimeout(() => getUserAccount(), 2000);
     }, [])
 
     const getUserAccount = async () => {
@@ -36,7 +37,7 @@ const UserProvider = ({ children }) => {
                     groupWithRoles: data.groupWithRoles && data.groupWithRoles,
                 }
             }
-            console.log('set user1', data);
+
             login(data);
         }
         else {
@@ -50,15 +51,13 @@ const UserProvider = ({ children }) => {
                     groupWithRoles: '',
                 }
             };
-            console.log('set user1', data);
+
             login(data);
         }
 
     }
     // Login updates the user data with a name parameter
     const login = (data) => {
-
-        console.log('set user2', data);
         setUser(data);
     };
 

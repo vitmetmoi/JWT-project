@@ -21,14 +21,19 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(function (response) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
+    console.log('res', response)
+
     return response;
 }, function (error) {
+    console.log('err', error)
     const status = error && error.response && error.response.status || 500;
+    console.log('status', status)
     // we can handle global errors here
     switch (status) {
         // authentication (token related issues)
         case 401: {
             toast.error("Unauthorized user,please login...")
+            toast.warn("Unauthorized user,please login...");
             return error;
         }
 

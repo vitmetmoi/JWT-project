@@ -7,9 +7,9 @@ const createToken = (payload) => {
 
     let key = process.env.JWT_SECRET;
     try {
-        console.log(payload)
+
         var token = jwt.sign(payload, key, {
-            expiresIn: payload.expiresIn
+            expiresIn: process.env.JWT_EXPIRES_IN
         });
 
     }
@@ -42,10 +42,7 @@ const verifyToken = (token) => {
 const checkUserJWT = (req, res, next) => {
     try {
 
-
-        console.log('prev path', req.path);
-
-        if (nonSecurePaths.includes(req.path) || req.path == '/api/account') return next();
+        if (nonSecurePaths.includes(req.path) || req.path === '/api/account') return next();
 
         let cookies = req.cookies;
 
@@ -91,7 +88,7 @@ const checkUserJWT = (req, res, next) => {
 const checkUserPermission = (req, res, next) => {
     let cookies = req.cookies;
     let path = req.path;
-    console.log('cookie', cookies)
+
 
     if (nonSecurePaths.includes(req.path)) return next();
 
@@ -102,8 +99,8 @@ const checkUserPermission = (req, res, next) => {
         if (decoded) {
 
             let roles = decoded.role.Roles;
-            console.log('roles', roles);
-            console.log('path', path)
+            // console.log('roles', roles);
+            // console.log('path', path)
             if (!roles || roles.length === 0) {
                 return res.status(403).json({
                     EC: 401,
@@ -113,7 +110,7 @@ const checkUserPermission = (req, res, next) => {
             }
             else {
                 let canAccess = roles.some(item => { return item.url === path })
-                console.log(canAccess)
+                console.log('can access', canAccess)
                 if (canAccess === true) {
                     next();
                 }

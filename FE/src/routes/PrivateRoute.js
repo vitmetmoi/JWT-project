@@ -11,7 +11,7 @@ function PrivateRoute(props) {
     useEffect(() => {
         let data = user;
         console.log('data', data)
-        if (!data || data.auth === false) {
+        if (data && data.auth === false) {
             history.push('/login');
         }
     }, [])
