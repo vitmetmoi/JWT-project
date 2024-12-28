@@ -45,14 +45,8 @@ const Login = (props) => {
 
 
             if (res.data && res.data.EC === 0) {
-                login(res.data.DT);
                 console.log('res', res.data.DT)
-
-                let data = {
-                    isAuthentication: true,
-                    token: "fake_token1233123123123"
-                }
-
+                login(res.data.DT);
                 history.push('/user');
 
             }
