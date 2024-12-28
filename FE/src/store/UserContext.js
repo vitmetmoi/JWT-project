@@ -21,13 +21,13 @@ const UserProvider = ({ children }) => {
 
     useEffect(() => {
 
-        setTimeout(() => getUserAccount(), 2000);
+        setTimeout(() => getUserAccount(), 1000);
     }, [])
 
     const getUserAccount = async () => {
         try {
             let res = await getUserAccountService();
-            console.log("resasd", res)
+            console.log('res 1213123', res)
             if (res && res.data.EC === 0) {
                 let data = res.data.DT;
 

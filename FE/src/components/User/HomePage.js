@@ -8,11 +8,14 @@ import ConfirmDeleteModal from './ConfirmDeleteModal';
 import UserModal from './UserModal';
 import { UserContext } from '../../store/UserContext';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUsers, faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
+
 
 function HomePage(props) {
 
     const { user, login, logout } = useContext(UserContext);
-    console.log('user', user);
+
     let itemsPerPage = 3;
     const items = [...Array(33).keys()];
 
@@ -81,9 +84,15 @@ function HomePage(props) {
     return (
         <div className='homepage-container container'>
             <div className='homepage-content mt-5 '>
-                <div className='homepage-title'>Table User</div>
+
+                <div className='homepage-title'>
+                    <FontAwesomeIcon className='table-icon' icon={faUsers}></FontAwesomeIcon>
+                    Table User
+                </div>
                 <div className="button-group mt-3">
-                    <button className='btn btn-light'>Refresh</button>
+                    <button
+                        onClick={() => getPaginateDataFromParent()}
+                        className='btn btn-light'>Refresh</button>
                     <button
                         onClick={() => changeOpenModalUser()}
                         className='btn btn-primary'>Create</button>
@@ -118,8 +127,8 @@ function HomePage(props) {
                                                 <td>{item.phoneNumber}</td>
                                                 <td>{item.Group ? item.Group.name : 'null'}</td>
                                                 <td className='button-group'>
-                                                    <button onClick={() => changeOpenModal(item)} className='btn btn-light'>Delete</button>
-                                                    <button onClick={() => changeOpenModalUser('EDIT', item)} className='btn btn-primary  '>Edit</button>
+                                                    <button onClick={() => changeOpenModal(item)} className='btn btn-light'><FontAwesomeIcon icon={faTrash} /></button>
+                                                    <button onClick={() => changeOpenModalUser('EDIT', item)} className='btn btn-primary  '><FontAwesomeIcon icon={faPen} /></button>
                                                 </td>
                                             </tr>
                                         </>
