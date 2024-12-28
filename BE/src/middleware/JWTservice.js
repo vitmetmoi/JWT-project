@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 require('dotenv').config();
 
 const nonSecurePaths = ['/', '/api/login', '/api/create', '/login', '/register', '/createUser', '/api/createUser', '/api/account'];
-
+const checkUserPaths = ['/', '/api/login', '/api/create', '/login', '/register', '/createUser', '/api/createUser'];
 const createToken = (payload) => {
 
     let key = process.env.JWT_SECRET;
@@ -42,16 +42,18 @@ const verifyToken = (token) => {
 const checkUserJWT = (req, res, next) => {
     try {
 
-        if (nonSecurePaths.includes(req.path) || req.path === '/api/account') return next();
-
         let cookies = req.cookies;
+        let token = cookies.jwt && cookies.jwt.accessToken ? cookies.jwt.accessToken : "";
+        req.user = {
+            auth: false,
+        }
 
-        let token = cookies.jwt.accessToken;
+        if (nonSecurePaths.includes(req.path) && req.path !== '/api/account') return next();
 
         if (token) {
 
             let decoded = verifyToken(token);
-
+            console.log('decoded', decoded);
 
             if (decoded) {
 
@@ -59,23 +61,24 @@ const checkUserJWT = (req, res, next) => {
                 next();
             }
             else {
-                return res.status(403).json({
+                return res.status(401).json({
                     EC: 401,
                     DT: '',
-                    EM: 'You dont have permistion to access!'
+                    EM: 'Your token has expired,please login again!'
                 })
             }
         }
         else {
-            return res.status(403).json({
+            return res.status(401).json({
                 EC: 401,
                 DT: '',
-                EM: 'You dont have permistion to access!'
+                EM: 'Missing token!'
             })
         }
     }
     catch (e) {
-        return res.status(403).json({
+        console.log(e);
+        return res.status(401).json({
             EC: 401,
             DT: '',
             EM: 'You dont have permistion to access!'

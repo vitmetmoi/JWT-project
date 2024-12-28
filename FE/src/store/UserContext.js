@@ -25,22 +25,42 @@ const UserProvider = ({ children }) => {
     }, [])
 
     const getUserAccount = async () => {
-        let res = await getUserAccountService();
-        if (res && res.data.EC === 0) {
-            let data = {
-                token: data.token,
-                isLoading: false,
-                auth: true,
-                account: {
-                    userName: data.userName && data.userName,
-                    email: data.email && data.email,
-                    groupWithRoles: data.groupWithRoles && data.groupWithRoles,
-                }
-            }
+        try {
+            let res = await getUserAccountService();
+            console.log("resasd", res)
+            if (res && res.data.EC === 0) {
+                let data = res.data.DT;
 
-            login(data);
+                let userData = {
+                    token: data.token ? data.token : '',
+                    isLoading: false,
+                    auth: data.auth === false ? false : true,
+                    account: {
+                        userName: data.userName && data.userName,
+                        email: data.email && data.email,
+                        groupWithRoles: data.groupWithRoles && data.groupWithRoles,
+                    }
+                }
+
+                setUser(userData);
+            }
+            else {
+
+                let data = {
+                    token: '',
+                    isLoading: false,
+                    auth: false,
+                    account: {
+                        userName: '',
+                        email: '',
+                        groupWithRoles: '',
+                    }
+                };
+
+                setUser(data);
+            }
         }
-        else {
+        catch (e) {
             let data = {
                 token: '',
                 isLoading: false,
@@ -52,13 +72,27 @@ const UserProvider = ({ children }) => {
                 }
             };
 
-            login(data);
+            setUser(data);
+            console.log(e);
         }
+
 
     }
     // Login updates the user data with a name parameter
     const login = (data) => {
-        setUser(data);
+
+        let userData = {
+            token: data.token,
+            isLoading: false,
+            auth: data.auth,
+            account: {
+                userName: data.userName && data.userName,
+                email: data.email && data.email,
+                groupWithRoles: data.groupWithRoles && data.groupWithRoles,
+            }
+        }
+
+        setUser(userData);
     };
 
     // Logout updates the user data to default

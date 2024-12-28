@@ -1,10 +1,10 @@
 import { ToastContainer, toast } from 'react-toastify';
-const axios = require('axios')
+import axios, { isCancel, AxiosError } from 'axios';
 
 
 
 const instance = axios.create({
-    baseURL: 'http://localhost:8080/api',
+    baseURL: 'http://localhost:8080',
 });
 
 instance.defaults.withCredentials = true;
@@ -17,30 +17,29 @@ axios.interceptors.request.use(function (config) {
     return Promise.reject(error);
 });
 
-// Add a response interceptor
 axios.interceptors.response.use(function (response) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
-    console.log('res', response)
+    console.log('res axios', response)
 
     return response;
-}, function (error) {
-    console.log('err', error)
-    const status = error && error.response && error.response.status || 500;
-    console.log('status', status)
+}, (error) => {
+    console.log('err axios', error)
+    const status = error.response ? error.response.status : 500;
+    console.log('status axios', status)
     // we can handle global errors here
     switch (status) {
         // authentication (token related issues)
         case 401: {
-            toast.error("Unauthorized user,please login...")
+
             toast.warn("Unauthorized user,please login...");
-            return error;
+            return error.response.data;
         }
 
         // forbidden (permission related issues)
         case 403: {
             toast.error("You dont have permistion to access!")
-            return error;
+            return error.response.data;
         }
 
         // bad request
@@ -70,6 +69,8 @@ axios.interceptors.response.use(function (response) {
     }
 
 });
+
+
 
 
 export default instance;

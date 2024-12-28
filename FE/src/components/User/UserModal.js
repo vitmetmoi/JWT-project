@@ -80,45 +80,52 @@ function UserModal(props) {
     }
 
     const handleOnclickSubmit = async (action) => {
-        if (action === 'CREATE') {
-            if (validateInput('CREATE') === true) {
-                let res = await createUserService(formState);
-                console.log(res);
-                if (res && res.data.EC === 0) {
-                    toast.info('Create user completed!')
-                    setFormState(defaultFormState);
-                    props.changeOpenModalUser();
-                    props.getPaginateDataFromParent();
+        try {
+
+
+            if (action === 'CREATE') {
+                if (validateInput('CREATE') === true) {
+                    let res = await createUserService(formState);
+                    console.log(res);
+                    if (res && res.data.EC === 0) {
+                        toast.info('Create user completed!')
+                        setFormState(defaultFormState);
+                        props.changeOpenModalUser();
+                        props.getPaginateDataFromParent();
+                    }
+                    else if (res && res.data.EC !== 0) {
+                        toast.warn(res.data.EM);
+                    }
+                    else {
+                        toast.warn('Error!')
+                    }
                 }
-                else if (res && res.data.EC !== 0) {
-                    toast.warn(res.data.EM);
-                }
-                else {
-                    toast.warn('Error!')
-                }
+
             }
 
+            else if (action === 'EDIT') {
+                if (validateInput('EDIT') === true) {
+                    let data = {
+                        ...formState, id: props.userData.id
+                    }
+                    let res = await editUserService(data);
+                    if (res && res.data.EC === 0) {
+                        toast.info('Edit user completed!')
+                        setFormState(defaultFormState);
+                        props.changeOpenModalUser();
+                        props.getPaginateDataFromParent();
+                    }
+                    else if (res && res.data.EC !== 0) {
+                        toast.warn(res.data.EM);
+                    }
+                    else {
+                        toast.warn('Error!')
+                    }
+                }
+            }
         }
-
-        else if (action === 'EDIT') {
-            if (validateInput('EDIT') === true) {
-                let data = {
-                    ...formState, id: props.userData.id
-                }
-                let res = await editUserService(data);
-                if (res && res.data.EC === 0) {
-                    toast.info('Edit user completed!')
-                    setFormState(defaultFormState);
-                    props.changeOpenModalUser();
-                    props.getPaginateDataFromParent();
-                }
-                else if (res && res.data.EC !== 0) {
-                    toast.warn(res.data.EM);
-                }
-                else {
-                    toast.warn('Error!')
-                }
-            }
+        catch (e) {
+            console.log(e);
         }
 
     }
