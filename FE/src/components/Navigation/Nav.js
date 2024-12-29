@@ -43,7 +43,7 @@ const Nav = (props) => {
                         <DropdownButton id="dropdown-basic-button" title="Menu">
                             <Dropdown.Item ><Link to="/home" class="nav-link" aria-current="page" >Home</Link></Dropdown.Item>
                             <Dropdown.Item ><Link to='/user' class="nav-link" >User</Link></Dropdown.Item>
-                            <Dropdown.Item ><Link to='/project' class="nav-link" >Project</Link></Dropdown.Item>
+                            <Dropdown.Item ><Link to='/role' class="nav-link" >Role</Link></Dropdown.Item>
                             <Dropdown.Divider />
                             {
                                 user.auth === true ?
@@ -55,7 +55,7 @@ const Nav = (props) => {
                     <div class="nav-items d-none d-sm-block " id="navbarNav">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <Link to="/home" class="nav-link" aria-current="page" >Home</Link>
+                                <Link to="/home" class="nav-link active" aria-current="page" >Home</Link>
                             </li>
                             <li class="nav-item">
                                 <Link to='/user' class="nav-link" >User</Link>
@@ -63,9 +63,9 @@ const Nav = (props) => {
                             <li class="nav-item">
                                 <Link to='/role' class="nav-link" >Role</Link>
                             </li>
-                            <li class="nav-item">
+                            {/* <li class="nav-item">
                                 <Link to='/project' class="nav-link" >Project</Link>
-                            </li>
+                            </li> */}
 
 
                         </ul>

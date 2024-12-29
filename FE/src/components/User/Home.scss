@@ -1,0 +1,79 @@
+.jwt-documentation {
+    max-width  : 1200px;
+    margin     : 2rem auto;
+    padding    : 2rem;
+    font-family: "Times New Roman", Times, serif;
+    background : #fff;
+    color      : #333;
+    line-height: 1.6;
+}
+
+.jwt-header {
+    border-bottom : 2px solid #2962ff;
+    margin-bottom : 2rem;
+    padding-bottom: 1rem;
+}
+
+.doc-title {
+    font-size    : 2.5rem;
+    margin-bottom: 0.5rem;
+    font-weight  : normal;
+}
+
+.doc-metadata {
+    font-size    : 0.9rem;
+    color        : #666;
+    margin-bottom: 1rem;
+}
+
+.doc-abstract {
+    font-style : italic;
+    margin     : 1.5rem 0;
+    padding    : 1rem;
+    background : #f8f9fa;
+    border-left: 4px solid #2962ff;
+}
+
+.doc-section {
+    margin: 2rem 0;
+}
+
+.section-title {
+    font-size    : 1.5rem;
+    margin-bottom: 1rem;
+    color        : #1a237e;
+    font-weight  : normal;
+}
+
+.doc-subsection {
+    margin      : 1rem 0;
+    padding-left: 1rem;
+}
+
+.subsection-title {
+    font-size: 1.2rem;
+    color    : #283593;
+    margin   : 1rem 0;
+}
+
+.code-example {
+    background   : #f5f5f5;
+    padding      : 1rem;
+    margin       : 1rem 0;
+    font-family  : monospace;
+    border-radius: 4px;
+    overflow-x   : auto;
+}
+
+.reference-list {
+    margin-top : 2rem;
+    padding-top: 1rem;
+    border-top : 1px solid #ddd;
+}
+
+.note-box {
+    background : #fff3e0;
+    padding    : 1rem;
+    margin     : 1rem 0;
+    border-left: 4px solid #ff9800;
+}

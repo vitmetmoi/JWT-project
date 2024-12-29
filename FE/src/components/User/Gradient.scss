@@ -146,3 +146,32 @@
         }
     }
 }
+
+.carousel-container {
+    margin-top   : 500px;
+    margin-bottom: 500px;
+
+    .image-container {
+        height: 500px;
+
+        .img-carousel {
+
+            background-size      : cover;
+            background-repeat    : no-repeat;
+            background-position-x: center;
+            height               : 100%;
+        }
+
+        .img-1 {
+            background-image: url('https://i.pinimg.com/originals/d1/1a/42/d11a4231a6fd0b25c0b4b2d4634701e2.gif');
+        }
+
+        .img-2 {
+            background-image: url("https://i.pinimg.com/originals/2f/10/ce/2f10ce69b96c0611989308b0abc68e70.gif");
+        }
+
+        .img-3 {
+            background-image: url("https://i.pinimg.com/originals/1c/3e/6c/1c3e6cf5100fc66db16880281354fcdf.gif");
+        }
+    }
+}

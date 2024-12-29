@@ -174,8 +174,30 @@ const handleLogout = async (req, res) => {
     }
 }
 
+const handleAddRole = async (req, res) => {
+
+    try {
+        let role = req.body;
+        let response = await userService.addRoleService(role);
+        return res.status(200).json({
+            DT: response.DT,
+            EC: response.EC,
+            EM: response.EM
+        })
+    }
+    catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            DT: '',
+            EC: -1,
+            EM: 'err from sever...'
+        })
+
+    }
+}
+
 
 module.exports = {
     handleCreateUser, handleGetUser, handleDeleteUser,
-    handleEditUser, handleGetPaginate, handleGetAccount, handleLogout
+    handleEditUser, handleGetPaginate, handleGetAccount, handleLogout, handleAddRole
 }

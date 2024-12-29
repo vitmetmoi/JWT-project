@@ -1,5 +1,7 @@
 import React from 'react';
-import './Gradient.scss'
+import './Gradient.scss';
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from 'react-responsive-carousel';
 function Gradient(props) {
     return (
         <>
@@ -56,6 +58,27 @@ function Gradient(props) {
 
                 </div>
             </div>
+
+            <div className='carousel-container container'>
+                <Carousel showArrows={true} onSwipeMove={true}>
+                    <div className='image-container'>
+                        <div className='img-carousel img-1' />
+
+                    </div>
+                    <div className='image-container'>
+                        <div className='img-carousel img-2' />
+
+                    </div>
+                    <div className='image-container '>
+                        <div className='img-carousel img-3' />
+
+                    </div>
+                </Carousel>
+
+            </div>
+
+
+
         </>
     );
 }

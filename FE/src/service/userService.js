@@ -30,6 +30,10 @@ export const getUserAccountService = () => {
 export const logoutService = () => {
     return axios.post(`/api/logout`)
 }
+export const addRoleService = (data) => {
+    return axios.post(`/api/add-role`, data)
+}
+
 
 // module.exports = {
 //     createUserService, loginService, getUserService, getPaginateService, deleteUserService, editUserService
