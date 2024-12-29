@@ -29,6 +29,7 @@
     "react-spinners": "^0.15.0",
     "react-toastify": "^8.2.0",
     "sass": "^1.82.0",
+    "uuid": "^8.3.2",
     "web-vitals": "^1.1.2"
   },
   "scripts": {

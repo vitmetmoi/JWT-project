@@ -1,0 +1,22 @@
+.role-container {
+    .role-title {}
+
+    .role-items {
+        .item-group {
+            .input-group {
+                width: 41.666% !important;
+            }
+
+            .trash {
+                cursor   : pointer;
+                font-size: 110%;
+
+                :hover {
+                    opacity: 0.6;
+                }
+            }
+
+            .item {}
+        }
+    }
+}
