@@ -45,7 +45,6 @@ const Login = (props) => {
 
 
             if (res.data && res.data.EC === 0) {
-                console.log('res', res.data.DT)
                 login(res.data.DT);
                 history.push('/user');
 

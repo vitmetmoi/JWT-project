@@ -1,0 +1,148 @@
+:root {
+    --special_red   : #DE3163;
+    --special_blue  : #6495ED;
+    --special_green : #DFFF00;
+    --special_orange: #FF7F50;
+    --special_gree  : #9FE2BF;
+    --special_gr    : #40E0D0;
+    --special_purple: #CCCCFF;
+    --special_yellow: #FFBF00;
+    --light_black   : rgb(0, 0, 0, 0.2);
+}
+
+.gradient-container {
+
+    * {
+        font-family: cursive;
+    }
+
+    div.Container {
+        width       : 50%;
+        height      : 360px;
+        margin-left : auto;
+        margin-right: auto;
+        margin-top  : 200px;
+        border      : 1px solid rgb(0, 0, 0, 0.2);
+    }
+
+    .board {
+        width             : 120px;
+        height            : 130px;
+        float             : left;
+        margin-left       : 50px;
+        margin-top        : 30px;
+        border            : 1px solid var(--light_black);
+        -webkit-transition: all 1s ease;
+        transition        : all 0.5 ease;
+        position          : relative;
+        left              : 2%;
+        overflow          : hidden;
+    }
+
+    .colorpicker {
+        background-color: black;
+        width           : 100%;
+        height          : 80px;
+    }
+
+    .content {
+        padding    : 10px 15px;
+        font-size  : 70%;
+        border-top : 1px solid var(--light_black);
+        font-weight: bold;
+    }
+
+    .board:hover {
+        width: 150px;
+        left : 0;
+    }
+
+    .cube {
+        width                    : 30px;
+        height                   : 30px;
+        position                 : absolute;
+        background-color         : #DE3163;
+        animation-name           : ani;
+        animation-duration       : 5s;
+        animation-iteration-count: infinite;
+        transition               : all 0.5 ease;
+    }
+
+    #color1 {
+        background-color: var(--special_green);
+    }
+
+    #color2 {
+        background-color: var(--special_blue);
+    }
+
+    #color3 {
+        background-color: var(--special_orange);
+    }
+
+    #color4 {
+        background-color: var(--special_red);
+    }
+
+    #color5 {
+        background-color: var(--special_gree);
+    }
+
+    #color6 {
+        background-color: var(--special_gr);
+    }
+
+    #color7 {
+        background-color: var(--special_purple);
+    }
+
+    #color8 {
+        background-color: var(--special_yellow);
+    }
+
+    @keyframes ani {
+        0% {
+            left            : 20%;
+            top             : 15%;
+            transform       : rotate(0deg);
+            background-color: var(--special_green);
+        }
+
+        25% {
+            left            : 80%;
+            top             : 15%;
+            transform       : rotate(360deg);
+            background-color: var(--special_red);
+        }
+
+        50% {
+            top : 70%;
+            left: 80%;
+            ;
+            transform       : rotate(0deg);
+            background-color: var(--special_yellow);
+        }
+
+        75% {
+            left: 20%;
+            top : 70%;
+            ;
+            transform       : rotate(360deg);
+            background-color: var(--special_gree);
+        }
+
+        100% {
+            top : 15%;
+            left: 20%;
+            ;
+            transform       : rotate(0deg);
+            background-color: var(--special_green);
+        }
+    }
+
+    @media screen and (max-width: 800px) {
+        div.Container {
+            height: 1300px;
+        }
+    }
+}

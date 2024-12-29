@@ -21,13 +21,13 @@ const UserProvider = ({ children }) => {
 
     useEffect(() => {
 
-        setTimeout(() => getUserAccount(), 2000);
+        setTimeout(() => getUserAccount(), 1000);
     }, [])
 
     const getUserAccount = async () => {
         try {
             let res = await getUserAccountService();
-            console.log("resasd", res)
+            console.log('res 1213123', res)
             if (res && res.data.EC === 0) {
                 let data = res.data.DT;
 
@@ -80,18 +80,18 @@ const UserProvider = ({ children }) => {
     }
     // Login updates the user data with a name parameter
     const login = (data) => {
-
+        console.log('data login', data)
         let userData = {
             token: data.token,
             isLoading: false,
-            auth: data.auth,
+            auth: data.auth ? data.auth : true,
             account: {
-                userName: data.userName && data.userName,
-                email: data.email && data.email,
+                userName: data && data.userName ? data.userName : '',
+                email: data && data.email ? data.email : '',
                 groupWithRoles: data.groupWithRoles && data.groupWithRoles,
             }
         }
-
+        console.log('data user', data)
         setUser(userData);
     };
 

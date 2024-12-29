@@ -8,6 +8,15 @@
         }
 
         .homepage-title {
+            margin-left : auto;
+            margin-right: auto;
+            width       : fit-content;
+
+            .table-icon {
+                font-size   : 80%;
+                margin-right: 10px;
+            }
+
             font-size  : 200%;
             font-weight: 600;
         }

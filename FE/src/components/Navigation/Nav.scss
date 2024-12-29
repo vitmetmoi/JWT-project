@@ -1,42 +1,94 @@
-.navigation-container {
-    ul {
-        list-style-type : none;
-        margin          : 0;
-        padding         : 0;
-        overflow        : hidden;
-        background-color: #333;
+.nav-container {
+    display        : flex;
+    flex-direction : row;
+    justify-content: left !important;
+
+
+    .nav-items {
+        width: fit-content;
+
     }
 
-    li {
-        float       : left;
-        border-right: 1px solid #bbb;
+    .middle-icon {
+        position   : relative;
+        margin-left: 24%;
+        cursor     : pointer;
+        animation  : rotate 5s linear infinite;
+        font-size  : 150%;
+    }
 
-        &:active {
-            background-color: #04AA6D;
+    .account-dropdown {
+        position: absolute;
+        right   : 2%;
+    }
+
+    // .middle-icon {
+    //     width                       : 30px;
+    //     position                    : relative;
+    //     left                        : 30px;
+    //     animation                   : trans 5s linear infinite;
+    //     // transition-duration      : 0.8s;
+    //     font-size                   : 150%;
+    //     animation-direction         : alternate-reverse;
+
+    //     .hippo {}
+
+    // }
+
+    // .account-dropdown {
+    //     margin-left: 70%;
+
+    //     .account-icon {
+    //         font-size: 110%;
+    //     }
+    // }
+
+    @keyframes rotate {
+        0% {
+            color    : #FFBF00;
+            transform: rotate(360deg);
+
+        }
+
+        25% {
+            color: #DE3163;
+
+        }
+
+        50% {
+            color: #6495ED;
+
+        }
+
+        100% {
+            color: #9FE2BF;
+
+
         }
     }
 
-    li:last-child {
-        border-right: none;
-    }
-
-    li a {
-        display        : block;
-        color          : white;
-        text-align     : center;
-        padding        : 14px 16px;
-        text-decoration: none;
-
-        &:active {
-            background-color: #04AA6D;
+    @keyframes trans {
+        0% {
+            color    : #FFBF00;
+            transform: rotate(360deg);
+            left     : 0;
         }
 
+        25% {
+            color: #DE3163;
+
+        }
+
+        50% {
+            color: #6495ED;
+
+        }
+
+        100% {
+            color: #9FE2BF;
+            left : 65%;
+
+        }
     }
-
-    li a:hover:not(.active) {
-        background-color: #111;
-    }
-
-
 
 }

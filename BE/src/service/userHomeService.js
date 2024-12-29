@@ -138,6 +138,7 @@ const loginUserService = async (userData) => {
 
             if (result === true) {
                 let payload = {
+                    userName: user.userName,
                     email: user.email,
                     role: roles,
 

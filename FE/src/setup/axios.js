@@ -9,7 +9,7 @@ const instance = axios.create({
 
 instance.defaults.withCredentials = true;
 
-axios.interceptors.request.use(function (config) {
+instance.interceptors.request.use(function (config) {
     // Do something before request is sent
     return config;
 }, function (error) {
@@ -17,7 +17,7 @@ axios.interceptors.request.use(function (config) {
     return Promise.reject(error);
 });
 
-axios.interceptors.response.use(function (response) {
+instance.interceptors.response.use(function (response) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
     console.log('res axios', response)
@@ -31,15 +31,14 @@ axios.interceptors.response.use(function (response) {
     switch (status) {
         // authentication (token related issues)
         case 401: {
-
-            toast.warn("Unauthorized user,please login...");
-            return error.response.data;
+            toast.warn("Unauthorized user please login...");
+            return error.response;
         }
 
         // forbidden (permission related issues)
         case 403: {
             toast.error("You dont have permistion to access!")
-            return error.response.data;
+            return error.response;
         }
 
         // bad request

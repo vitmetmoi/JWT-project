@@ -5,7 +5,9 @@ import Register from '../components/Register/Register';
 import UserRoute from './UserRoute';
 import HomePage from '../components/User/HomePage';
 import PrivateRoute from './PrivateRoute';
-import Home from '../components/User/Home'
+import Home from '../components/User/Home';
+import Gradient from '../components/User/Gradient';
+import Role from '../components/User/Role';
 function AppRoute(props) {
     return (
         <>
@@ -13,11 +15,15 @@ function AppRoute(props) {
             <Switch>
                 {/* <UserRoute></UserRoute> */}
                 <PrivateRoute path="/user" component={HomePage}></PrivateRoute>
+                <PrivateRoute path="/role" component={Role}></PrivateRoute>
                 <Route path="/login">
                     <Login></Login>
                 </Route>
                 <Route path="/register">
                     <Register></Register>
+                </Route>
+                <Route path="/gradient">
+                    <Gradient></Gradient>
                 </Route>
                 <Route path="/">
                     <Home></Home>

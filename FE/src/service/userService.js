@@ -5,7 +5,7 @@ export const createUserService = (userData) => {
 }
 
 export const loginService = (userData) => {
-    return axios.post('/login', userData)
+    return axios.post('/api/login', userData)
 }
 
 export const getUserService = (type, id) => {
@@ -24,7 +24,11 @@ export const editUserService = (userData) => {
     return axios.put('/api/editUser', { ...userData })
 }
 export const getUserAccountService = () => {
-    return axios.get(`/account`)
+    return axios.get(`/api/account`)
+}
+
+export const logoutService = () => {
+    return axios.post(`/api/logout`)
 }
 
 // module.exports = {
