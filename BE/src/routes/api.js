@@ -22,6 +22,7 @@ const initApiRoutes = (app) => {
     router.get('/getUser', userController.handleGetUser)
     router.get('/getPaginate', userController.handleGetPaginate)
     router.get('/account', userController.handleGetAccount)
+    router.post('/logout', userController.handleLogout)
     return app.use("/api", router)
 }
 

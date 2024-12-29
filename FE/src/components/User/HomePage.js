@@ -91,7 +91,10 @@ function HomePage(props) {
                 </div>
                 <div className="button-group mt-3">
                     <button
-                        onClick={() => getPaginateDataFromParent()}
+                        onClick={() => {
+                            getPaginateDataFromParent();
+                            setCurrentPage(1);
+                        }}
                         className='btn btn-light'>Refresh</button>
                     <button
                         onClick={() => changeOpenModalUser()}
@@ -154,12 +157,12 @@ function HomePage(props) {
                     getPaginateDataFromParent={getPaginateDataFromParent}
                 ></UserModal>
                 <ReactPaginate
-                    nextLabel="next >"
+                    nextLabel=">"
                     onPageChange={handlePageClick}
                     pageRangeDisplayed={3}
                     marginPagesDisplayed={4}
                     pageCount={totalPages}
-                    previousLabel="< previous"
+                    previousLabel="<"
                     pageClassName="page-item"
                     pageLinkClassName="page-link"
                     previousClassName="page-item"

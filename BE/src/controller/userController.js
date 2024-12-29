@@ -153,7 +153,29 @@ const handleGetAccount = async (req, res) => {
 }
 
 
+const handleLogout = async (req, res) => {
+
+    try {
+        res.clearCookie("jwt");
+        return res.status(200).json({
+            DT: '',
+            EC: 0,
+            EM: 'logout complete!'
+        })
+    }
+    catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            DT: '',
+            EC: -1,
+            EM: 'err from sever...'
+        })
+
+    }
+}
+
 
 module.exports = {
-    handleCreateUser, handleGetUser, handleDeleteUser, handleEditUser, handleGetPaginate, handleGetAccount
+    handleCreateUser, handleGetUser, handleDeleteUser,
+    handleEditUser, handleGetPaginate, handleGetAccount, handleLogout
 }

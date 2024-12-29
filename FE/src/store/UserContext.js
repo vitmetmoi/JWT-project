@@ -80,18 +80,18 @@ const UserProvider = ({ children }) => {
     }
     // Login updates the user data with a name parameter
     const login = (data) => {
-
+        console.log('data login', data)
         let userData = {
             token: data.token,
             isLoading: false,
-            auth: data.auth,
+            auth: data.auth ? data.auth : true,
             account: {
-                userName: data.userName && data.userName,
-                email: data.email && data.email,
+                userName: data && data.userName ? data.userName : '',
+                email: data && data.email ? data.email : '',
                 groupWithRoles: data.groupWithRoles && data.groupWithRoles,
             }
         }
-
+        console.log('data user', data)
         setUser(userData);
     };
 

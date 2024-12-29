@@ -1,55 +1,83 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './Nav.scss'
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { useHistory, BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { UserContext } from '../../store/UserContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHippo, faPlane, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faHippo, faPlane, faUser, faSnowflake } from '@fortawesome/free-solid-svg-icons'
 import Select from 'react-select';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
-
+import { logoutService } from '../../service/userService';
 const Nav = (props) => {
 
 
     const { user, login, logout } = useContext(UserContext);
     const location = useLocation();
     const [selectedOption, setSelectedOption] = useState('');
-    console.log('loca', location)
+    let history = useHistory();
+    console.log('user', user)
+
+
+    const handleOnClickLogout = async () => {
+        try {
+            let res = await logoutService();
+            if (res && res.data.EC === 0) {
+                history.push('/login')
+            }
+        }
+        catch (e) {
+            console.log(e);
+        }
+    }
+
     if (location && location.pathname !== '/login') {
 
 
         return (
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid nav-container ">
-                    <div className=' '> <Link to='/home' class="navbar-brand " href="#">JsonWebToken</Link></div>
+                    <div className=' '> <Link to='/home' class="navbar-brand " >JsonWebToken</Link></div>
 
                     <div className='dropdown-mobile d-block d-sm-none ml-5'>
                         <DropdownButton id="dropdown-basic-button" title="Menu">
-                            <Dropdown.Item ><Link to="/home" class="nav-link" aria-current="page" href="#">Home</Link></Dropdown.Item>
-                            <Dropdown.Item ><Link to='/user' class="nav-link" href="#">User</Link></Dropdown.Item>
-                            <Dropdown.Item ><Link to='/project' class="nav-link" href="#">Project</Link></Dropdown.Item>
+                            <Dropdown.Item ><Link to="/home" class="nav-link" aria-current="page" >Home</Link></Dropdown.Item>
+                            <Dropdown.Item ><Link to='/user' class="nav-link" >User</Link></Dropdown.Item>
+                            <Dropdown.Item ><Link to='/project' class="nav-link" >Project</Link></Dropdown.Item>
                             <Dropdown.Divider />
-                            <Dropdown.Item ><Link to='/project' class="nav-link" href="#">Logout</Link></Dropdown.Item>
+                            {
+                                user.auth === true ?
+                                    < Dropdown.Item onClick={() => handleOnClickLogout()} >Logout</Dropdown.Item>
+                                    : < Dropdown.Item onClick={() => { history.push('/login') }} >Login</Dropdown.Item>
+                            }
                         </DropdownButton>
                     </div>
                     <div class="nav-items d-none d-sm-block " id="navbarNav">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <Link to="/home" class="nav-link" aria-current="page" href="#">Home</Link>
+                                <Link to="/home" class="nav-link" aria-current="page" >Home</Link>
                             </li>
                             <li class="nav-item">
-                                <Link to='/user' class="nav-link" href="#">User</Link>
+                                <Link to='/user' class="nav-link" >User</Link>
                             </li>
                             <li class="nav-item">
-                                <Link to='/project' class="nav-link" href="#">Project</Link>
+                                <Link to='/role' class="nav-link" >Role</Link>
                             </li>
+                            <li class="nav-item">
+                                <Link to='/project' class="nav-link" >Project</Link>
+                            </li>
+
 
                         </ul>
                     </div>
 
-                    <div className='middle-icon d-none d-sm-block'>
+                    {/* <div className='middle-icon d-none d-sm-block'>
                         <FontAwesomeIcon className='hippo' icon={faHippo} />
+                    </div> */}
+                    <div
+                        onClick={() => { history.push('/gradient') }}
+                        className='middle-icon d-none d-sm-block'>
+                        <FontAwesomeIcon className='hippo' icon={faSnowflake} />
                     </div>
 
                     <div className='account-dropdown d-none d-sm-block'>
@@ -59,15 +87,21 @@ const Nav = (props) => {
                             options={options}
                         /> */}
                         <DropdownButton id="dropdown-basic-button" title={<FontAwesomeIcon className='account-icon' icon={faUser} />}>
-                            <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                            <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                            <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                            <Dropdown.Item >Hello{user.account.userName ? ', ' + user.account.userName : ''} </Dropdown.Item>
+
+                            <Dropdown.Divider />
+                            {
+                                user.auth === true ?
+                                    < Dropdown.Item onClick={() => handleOnClickLogout()} >Logout</Dropdown.Item>
+                                    : < Dropdown.Item onClick={() => { history.push('/login') }} >Login</Dropdown.Item>
+                            }
+
                         </DropdownButton>
                     </div>
 
 
                 </div>
-            </nav>
+            </nav >
 
         );
     }

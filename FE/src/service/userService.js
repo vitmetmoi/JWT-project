@@ -27,6 +27,10 @@ export const getUserAccountService = () => {
     return axios.get(`/api/account`)
 }
 
+export const logoutService = () => {
+    return axios.post(`/api/logout`)
+}
+
 // module.exports = {
 //     createUserService, loginService, getUserService, getPaginateService, deleteUserService, editUserService
 // }

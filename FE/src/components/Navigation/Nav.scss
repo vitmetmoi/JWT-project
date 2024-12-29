@@ -10,23 +10,60 @@
     }
 
     .middle-icon {
-        width                       : 30px;
-        position                    : relative;
-        left                        : 30px;
-        animation                   : trans 5s linear infinite;
-        // transition-duration      : 0.8s;
-        font-size                   : 150%;
-        animation-direction         : alternate-reverse;
-
-        .hippo {}
-
+        position   : relative;
+        margin-left: 24%;
+        cursor     : pointer;
+        animation  : rotate 5s linear infinite;
+        font-size  : 150%;
     }
 
     .account-dropdown {
-        margin-left: 70%;
+        position: absolute;
+        right   : 2%;
+    }
 
-        .account-icon {
-            font-size: 110%;
+    // .middle-icon {
+    //     width                       : 30px;
+    //     position                    : relative;
+    //     left                        : 30px;
+    //     animation                   : trans 5s linear infinite;
+    //     // transition-duration      : 0.8s;
+    //     font-size                   : 150%;
+    //     animation-direction         : alternate-reverse;
+
+    //     .hippo {}
+
+    // }
+
+    // .account-dropdown {
+    //     margin-left: 70%;
+
+    //     .account-icon {
+    //         font-size: 110%;
+    //     }
+    // }
+
+    @keyframes rotate {
+        0% {
+            color    : #FFBF00;
+            transform: rotate(360deg);
+
+        }
+
+        25% {
+            color: #DE3163;
+
+        }
+
+        50% {
+            color: #6495ED;
+
+        }
+
+        100% {
+            color: #9FE2BF;
+
+
         }
     }
 
