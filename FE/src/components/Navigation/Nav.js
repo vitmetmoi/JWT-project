@@ -4,7 +4,7 @@ import './Nav.scss'
 import { useHistory, BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { UserContext } from '../../store/UserContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHippo, faPlane, faUser, faSnowflake } from '@fortawesome/free-solid-svg-icons'
+import { faHippo, faPlane, faUser, faSnowflake, faLock } from '@fortawesome/free-solid-svg-icons'
 import Select from 'react-select';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
@@ -107,7 +107,7 @@ const Nav = (props) => {
                             onChange={''}
                             options={options}
                         /> */}
-                        <DropdownButton id="dropdown-basic-button" title={<FontAwesomeIcon className='account-icon' icon={faUser} />}>
+                        <DropdownButton id="dropdown-basic-button" title={<FontAwesomeIcon className='account-icon' icon={faLock} />}>
                             <Dropdown.Item >Hello{user.account.userName ? ', ' + user.account.userName : ''} </Dropdown.Item>
 
                             <Dropdown.Divider />
