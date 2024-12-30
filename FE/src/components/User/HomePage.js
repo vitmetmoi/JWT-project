@@ -143,6 +143,10 @@ function HomePage(props) {
                         </tbody>
                     </table>
                 </div>
+
+
+
+
                 <ConfirmDeleteModal
                     userData={selectedUser}
                     changeOpenModal={changeOpenModal}
@@ -176,6 +180,40 @@ function HomePage(props) {
                     activeClassName="active"
                     renderOnZeroPageCount={null}
                 />
+
+
+                <div class="crud-overview col-12">
+                    {/* <h2 class="overview-title">JWT-Secured CRUD Operations</h2> */}
+
+                    <div class="overview-content text-center">
+                        <div class="info-section">
+                            <h3>Protected Operations</h3>
+                            • Create: JWT required<br></br>
+                            • Read: Public/Protected views<br></br>
+                            • Update: JWT + permissions check<br></br>
+                            • Delete: JWT + admin rights
+                        </div>
+
+                        <div class="info-section">
+                            <h3>Security Features</h3>
+                            • Token expiration<br></br>
+                            • Role-based access<br></br>
+                            • Request validation<br></br>
+                            • Error handling
+                        </div>
+
+
+                        <div class="code-box">
+
+                            headers:
+                            'Authorization': 'Bearer [your-jwt-token]',
+                            'Content-Type': 'application/json'
+
+                        </div>
+                    </div>
+                </div>
+
+
 
             </div>
         </div >

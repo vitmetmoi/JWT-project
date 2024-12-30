@@ -338,6 +338,30 @@ const getAccount = async (userData) => {
 }
 
 
+const addRoleService = async (roleData) => {
+    try {
+        if (!roleData) {
+            return {
+                DT: '',
+                EC: -1,
+                EM: 'Missing parameter!'
+            }
+        }
+        else {
+            await db.Role.bulkCreate(roleData)
+            return {
+                DT: '',
+                EC: 0,
+                EM: 'Completed!'
+            }
+
+        }
+    }
+    catch (e) {
+        console.log(e);
+    }
+}
+
 module.exports = {
-    getUserService, createUserService, deleteUserService, editUserService, getPaginateService, getAccount
+    getUserService, createUserService, deleteUserService, editUserService, getPaginateService, getAccount, addRoleService
 }

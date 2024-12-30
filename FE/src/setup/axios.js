@@ -11,6 +11,9 @@ instance.defaults.withCredentials = true;
 
 instance.interceptors.request.use(function (config) {
     // Do something before request is sent
+    // toast(<img className='margin-auto-img'
+    //     width={'50px'} height={'50px'}
+    //     src='https://cdn-icons-gif.flaticon.com/6172/6172512.gif'></img>)
     return config;
 }, function (error) {
     // Do something with request error

@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import './Login.scss';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { loginService } from '../../service/userService'
+import { loginService, getUserAccountService } from '../../service/userService'
 import { UserContext } from '../../store/UserContext';
 const Login = (props) => {
     let history = useHistory();
@@ -47,7 +47,6 @@ const Login = (props) => {
             if (res.data && res.data.EC === 0) {
                 login(res.data.DT);
                 history.push('/user');
-
             }
             else {
                 toast.warn(res.data.EM);

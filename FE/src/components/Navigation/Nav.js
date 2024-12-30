@@ -4,11 +4,12 @@ import './Nav.scss'
 import { useHistory, BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { UserContext } from '../../store/UserContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHippo, faPlane, faUser, faSnowflake } from '@fortawesome/free-solid-svg-icons'
+import { faHippo, faPlane, faUser, faSnowflake, faLock } from '@fortawesome/free-solid-svg-icons'
 import Select from 'react-select';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { logoutService } from '../../service/userService';
+import Countdown, { zeroPad, calcTimeDelta, formatTimeDelta } from 'react-countdown';
 const Nav = (props) => {
 
 
@@ -16,7 +17,7 @@ const Nav = (props) => {
     const location = useLocation();
     const [selectedOption, setSelectedOption] = useState('');
     let history = useHistory();
-    console.log('user', user)
+    console.log('formated', user);
 
 
     const handleOnClickLogout = async () => {
@@ -31,6 +32,17 @@ const Nav = (props) => {
         }
     }
 
+    const renderer = ({ hours, minutes, seconds, completed }) => {
+        if (completed) {
+            // Render a completed state
+            return <span>EXPIRED!</span>;
+        } else {
+            // Render a countdown
+            return <span>{zeroPad(hours)}:{zeroPad(minutes)}:{zeroPad(seconds)}</span>;
+            // return formatTimeDelta({ hours, minutes, seconds, completed });
+        }
+    };
+
     if (location && location.pathname !== '/login') {
 
 
@@ -43,7 +55,7 @@ const Nav = (props) => {
                         <DropdownButton id="dropdown-basic-button" title="Menu">
                             <Dropdown.Item ><Link to="/home" class="nav-link" aria-current="page" >Home</Link></Dropdown.Item>
                             <Dropdown.Item ><Link to='/user' class="nav-link" >User</Link></Dropdown.Item>
-                            <Dropdown.Item ><Link to='/project' class="nav-link" >Project</Link></Dropdown.Item>
+                            <Dropdown.Item ><Link to='/role' class="nav-link" >Role</Link></Dropdown.Item>
                             <Dropdown.Divider />
                             {
                                 user.auth === true ?
@@ -55,7 +67,7 @@ const Nav = (props) => {
                     <div class="nav-items d-none d-sm-block " id="navbarNav">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <Link to="/home" class="nav-link" aria-current="page" >Home</Link>
+                                <Link to="/home" class="nav-link active" aria-current="page" >Home</Link>
                             </li>
                             <li class="nav-item">
                                 <Link to='/user' class="nav-link" >User</Link>
@@ -63,9 +75,9 @@ const Nav = (props) => {
                             <li class="nav-item">
                                 <Link to='/role' class="nav-link" >Role</Link>
                             </li>
-                            <li class="nav-item">
+                            {/* <li class="nav-item">
                                 <Link to='/project' class="nav-link" >Project</Link>
-                            </li>
+                            </li> */}
 
 
                         </ul>
@@ -79,6 +91,15 @@ const Nav = (props) => {
                         className='middle-icon d-none d-sm-block'>
                         <FontAwesomeIcon className='hippo' icon={faSnowflake} />
                     </div>
+                    {user && user.exp &&
+                        <div className='expire-countdown '>Your token will be expired in : {
+                            <Countdown
+                                date={user.exp * 1000}
+                                renderer={renderer}
+                            />}
+                        </div>
+                    }
+
 
                     <div className='account-dropdown d-none d-sm-block'>
                         {/* <Select
@@ -86,7 +107,7 @@ const Nav = (props) => {
                             onChange={''}
                             options={options}
                         /> */}
-                        <DropdownButton id="dropdown-basic-button" title={<FontAwesomeIcon className='account-icon' icon={faUser} />}>
+                        <DropdownButton id="dropdown-basic-button" title={<FontAwesomeIcon className='account-icon' icon={faLock} />}>
                             <Dropdown.Item >Hello{user.account.userName ? ', ' + user.account.userName : ''} </Dropdown.Item>
 
                             <Dropdown.Divider />

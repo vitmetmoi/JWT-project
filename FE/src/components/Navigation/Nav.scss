@@ -11,10 +11,15 @@
 
     .middle-icon {
         position   : relative;
-        margin-left: 24%;
+        margin-left: 29%;
         cursor     : pointer;
         animation  : rotate 5s linear infinite;
         font-size  : 150%;
+    }
+
+    .expire-countdown {
+        margin-left: 25%;
+        opacity    : 0.7;
     }
 
     .account-dropdown {

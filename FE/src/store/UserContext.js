@@ -13,7 +13,9 @@ const UserProvider = ({ children }) => {
                 userName: '',
                 email: '',
                 groupWithRoles: '',
-            }
+            },
+            iat: '',
+            exp: '',
         }
 
     );
@@ -39,7 +41,9 @@ const UserProvider = ({ children }) => {
                         userName: data.userName && data.userName,
                         email: data.email && data.email,
                         groupWithRoles: data.groupWithRoles && data.groupWithRoles,
-                    }
+                    },
+                    iat: data.iat,
+                    exp: data.exp
                 }
 
                 setUser(userData);
@@ -54,7 +58,9 @@ const UserProvider = ({ children }) => {
                         userName: '',
                         email: '',
                         groupWithRoles: '',
-                    }
+                    },
+                    iat: '',
+                    exp: ''
                 };
 
                 setUser(data);
@@ -69,7 +75,9 @@ const UserProvider = ({ children }) => {
                     userName: '',
                     email: '',
                     groupWithRoles: '',
-                }
+                },
+                iat: '',
+                exp: ''
             };
 
             setUser(data);
@@ -89,7 +97,9 @@ const UserProvider = ({ children }) => {
                 userName: data && data.userName ? data.userName : '',
                 email: data && data.email ? data.email : '',
                 groupWithRoles: data.groupWithRoles && data.groupWithRoles,
-            }
+            },
+            iat: data.iat,
+            exp: data.exp
         }
         console.log('data user', data)
         setUser(userData);
