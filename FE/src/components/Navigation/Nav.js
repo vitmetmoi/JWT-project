@@ -38,7 +38,7 @@ const Nav = (props) => {
             return <span>EXPIRED!</span>;
         } else {
             // Render a countdown
-            return <span>{hours}:{minutes}:{seconds}</span>;
+            return <span>{zeroPad(hours)}:{zeroPad(minutes)}:{zeroPad(seconds)}</span>;
             // return formatTimeDelta({ hours, minutes, seconds, completed });
         }
     };
