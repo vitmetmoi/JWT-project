@@ -9,6 +9,7 @@ import Select from 'react-select';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { logoutService } from '../../service/userService';
+import Countdown, { zeroPad, calcTimeDelta, formatTimeDelta } from 'react-countdown';
 const Nav = (props) => {
 
 
@@ -16,7 +17,7 @@ const Nav = (props) => {
     const location = useLocation();
     const [selectedOption, setSelectedOption] = useState('');
     let history = useHistory();
-    console.log('user', user)
+    console.log('formated', user);
 
 
     const handleOnClickLogout = async () => {
@@ -30,6 +31,17 @@ const Nav = (props) => {
             console.log(e);
         }
     }
+
+    const renderer = ({ hours, minutes, seconds, completed }) => {
+        if (completed) {
+            // Render a completed state
+            return <span>EXPIRED!</span>;
+        } else {
+            // Render a countdown
+            return <span>{hours}:{minutes}:{seconds}</span>;
+            // return formatTimeDelta({ hours, minutes, seconds, completed });
+        }
+    };
 
     if (location && location.pathname !== '/login') {
 
@@ -79,6 +91,15 @@ const Nav = (props) => {
                         className='middle-icon d-none d-sm-block'>
                         <FontAwesomeIcon className='hippo' icon={faSnowflake} />
                     </div>
+                    {user && user.exp &&
+                        <div className='expire-countdown '>Your token will be expired in : {
+                            <Countdown
+                                date={user.exp * 1000}
+                                renderer={renderer}
+                            />}
+                        </div>
+                    }
+
 
                     <div className='account-dropdown d-none d-sm-block'>
                         {/* <Select

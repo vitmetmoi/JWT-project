@@ -7,6 +7,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { ToastContainer, toast } from 'react-toastify';
 import { addRoleService } from '../../service/userService';
 function Role(props) {
+    // list of all the cookies
+
     const [roleWithDescription, setRoleWithDescription] = useState({
         item0: { role: '', description: '' },
     })
@@ -66,7 +68,7 @@ function Role(props) {
                 // toast(<img className='margin-auto-img'
                 //     width={'50px'} height={'50px'}
                 //     src='https://cdn-icons-gif.flaticon.com/17905/17905718.gif'></img>, { autoClose: 1500 })
-                toast("Loading...")
+                toast("Loading...", { autoClose: 1500 })
 
                 setTimeout(() => {
                     toast.success("Save roles success!")
