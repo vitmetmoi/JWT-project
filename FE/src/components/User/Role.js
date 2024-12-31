@@ -29,6 +29,26 @@ function Role(props) {
 
     }
 
+    const validateState = () => {
+        let isValid = true;
+
+        Object.keys(roleWithDescription).map((keyName, i) => {
+            console.log('test 11', roleWithDescription[keyName])
+            if (!roleWithDescription[keyName].role || roleWithDescription[keyName].role === '') {
+                toast('Some URL fields is missing parameter!');
+                isValid = false;
+                return isValid;
+            }
+            if (!roleWithDescription[keyName].description || roleWithDescription[keyName].description === '') {
+                toast('Some description fields is missing parameter!');
+                isValid = false;
+                return isValid;
+            }
+        })
+
+        return isValid;
+    }
+
 
     const handleOnClickDeleteItem = (key) => {
         let _roleroleWithDescription = _.cloneDeep(roleWithDescription);
@@ -50,38 +70,40 @@ function Role(props) {
     }
 
     const handleOnClickConfrim = async () => {
+        if (validateState() === true) {
+            let data = [];
+            Object.keys(roleWithDescription).map((keyName, i) => {
+                let obj = {};
+                obj.url = roleWithDescription[keyName].role;
+                obj.description = roleWithDescription[keyName].description;
+                if (obj) {
+                    data.push(obj)
+                }
+            })
 
-        let data = [];
-        Object.keys(roleWithDescription).map((keyName, i) => {
-            let obj = {};
-            obj.url = roleWithDescription[keyName].role;
-            obj.description = roleWithDescription[keyName].description;
-            if (obj) {
-                data.push(obj)
-            }
-        })
+            if (data && data.length > 0) {
+                let res = await addRoleService(data);
+                toast("Loading...", { autoClose: 1500 })
+                if (res && res.data.EC === 0) {
 
-        if (data && data.length > 0) {
-            let res = await addRoleService(data);
-            toast("Loading...", { autoClose: 1500 })
-            if (res && res.data.EC === 0) {
+                    // toast(<img className='margin-auto-img'
+                    //     width={'50px'} height={'50px'}
+                    //     src='https://cdn-icons-gif.flaticon.com/17905/17905718.gif'></img>, { autoClose: 1500 })
+                    setTimeout(() => {
+                        toast.success(res.data.EM);
+                    }, 2000);
 
-                // toast(<img className='margin-auto-img'
-                //     width={'50px'} height={'50px'}
-                //     src='https://cdn-icons-gif.flaticon.com/17905/17905718.gif'></img>, { autoClose: 1500 })
-                setTimeout(() => {
-                    toast.success(res.data.EM);
-                }, 2000);
+                }
+                else if (res && res.data.EC === 1) {
+                    setTimeout(() => {
+                        toast.warn(res.data.EM);
+                    }, 2000);
+                }
+                else {
+                    toast.error('something went wrong...')
+                }
+            }
 
-            }
-            else if (res && res.data.EC === 1) {
-                setTimeout(() => {
-                    toast.warn(res.data.EM);
-                }, 2000);
-            }
-            else {
-                toast.error('something went wrong...')
-            }
         }
 
     }
