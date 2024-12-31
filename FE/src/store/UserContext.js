@@ -4,21 +4,19 @@ const UserContext = createContext(null);
 
 const UserProvider = ({ children }) => {
     // User is the name of the "data" that gets stored in context
-    const [user, setUser] = useState(
-        {
-            token: '',
-            isLoading: true,
-            auth: false,
-            account: {
-                userName: '',
-                email: '',
-                groupWithRoles: '',
-            },
-            iat: '',
-            exp: '',
-        }
-
-    );
+    const defaultUserData = {
+        token: '',
+        isLoading: true,
+        auth: false,
+        account: {
+            userName: '',
+            email: '',
+            groupWithRoles: '',
+        },
+        iat: '',
+        exp: '',
+    }
+    const [user, setUser] = useState(defaultUserData);
 
 
     useEffect(() => {
@@ -107,12 +105,7 @@ const UserProvider = ({ children }) => {
 
     // Logout updates the user data to default
     const logout = () => {
-        setUser((user) => ({
-            email: '',
-            groupWithRoles: '',
-            token: '',
-            auth: false
-        }));
+        setUser(defaultUserData)
     };
 
     return (

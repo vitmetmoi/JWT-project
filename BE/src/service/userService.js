@@ -348,12 +348,30 @@ const addRoleService = async (roleData) => {
             }
         }
         else {
-            await db.Role.bulkCreate(roleData)
-            return {
-                DT: '',
-                EC: 0,
-                EM: 'Completed!'
+            let currentRole = await db.Role.findAll({
+                attributes: ['url', 'description'],
+                raw: true
+            })
+            let difference = [];
+            difference = roleData.filter(x => !currentRole.some(e => e.url === x.url));
+
+            if (!difference || difference.length <= 0) {
+                return {
+                    DT: '',
+                    EC: 1,
+                    EM: 'Nothing has changed!'
+                }
             }
+            else {
+                await db.Role.bulkCreate(difference);
+                return {
+                    DT: '',
+                    EC: 0,
+                    EM: 'Save role success!'
+                }
+            }
+
+
 
         }
     }
