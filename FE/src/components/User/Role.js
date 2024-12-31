@@ -63,17 +63,21 @@ function Role(props) {
 
         if (data && data.length > 0) {
             let res = await addRoleService(data);
+            toast("Loading...", { autoClose: 1500 })
             if (res && res.data.EC === 0) {
 
                 // toast(<img className='margin-auto-img'
                 //     width={'50px'} height={'50px'}
                 //     src='https://cdn-icons-gif.flaticon.com/17905/17905718.gif'></img>, { autoClose: 1500 })
-                toast("Loading...", { autoClose: 1500 })
-
                 setTimeout(() => {
-                    toast.success("Save roles success!")
+                    toast.success(res.data.EM);
                 }, 2000);
 
+            }
+            else if (res && res.data.EC === 1) {
+                setTimeout(() => {
+                    toast.warn(res.data.EM);
+                }, 2000);
             }
             else {
                 toast.error('something went wrong...')

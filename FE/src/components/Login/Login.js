@@ -16,9 +16,6 @@ const Login = (props) => {
     const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
 
     const { user, login, logout } = useContext(UserContext);
-    useEffect(() => {
-
-    }, [])
 
     const validateInput = () => {
         setObjValidInput(defaultObjValidInput);
