@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 require('dotenv').config();
 
-const nonSecurePaths = ['/', '/api/login', '/api/create', '/api/createUser', '/api/account', '/account'];
+const nonSecurePaths = ['/', '/api/login', '/api/create', '/api/createUser', '/api/account', '/account', '/api/logout'];
 
 const createToken = (payload) => {
 
@@ -43,17 +43,15 @@ const checkUserJWT = (req, res, next) => {
     try {
 
         let cookies = req.cookies;
-        let token = cookies.jwt && cookies.jwt.accessToken ? cookies.jwt.accessToken : "";
+        let token = cookies.jwt ? cookies.jwt : "";
         req.user = {
             auth: false,
         }
 
         if (nonSecurePaths.includes(req.path) && req.path !== '/api/account') return next();
-
         if (token) {
 
             let decoded = verifyToken(token);
-            console.log('decoded', decoded);
 
             if (decoded) {
 
@@ -81,7 +79,7 @@ const checkUserJWT = (req, res, next) => {
         return res.status(401).json({
             EC: 401,
             DT: '',
-            EM: 'You dont have permistion to access!'
+            EM: 'You dont have permission to access!'
         })
     }
 
@@ -92,12 +90,10 @@ const checkUserPermission = (req, res, next) => {
     let cookies = req.cookies;
     let path = req.path;
 
-
     if (nonSecurePaths.includes(req.path)) return next();
 
     if (cookies && cookies.jwt) {
-
-        let token = cookies.jwt.accessToken;
+        let token = cookies.jwt;
         let decoded = verifyToken(token);
         if (decoded) {
 
@@ -121,7 +117,7 @@ const checkUserPermission = (req, res, next) => {
                     return res.status(403).json({
                         EC: 401,
                         DT: '',
-                        EM: 'You dont have permitsion to access this resource!'
+                        EM: 'You dont have permission to access this resource!'
                     })
                 }
             }

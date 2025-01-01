@@ -34,13 +34,13 @@ instance.interceptors.response.use(function (response) {
     switch (status) {
         // authentication (token related issues)
         case 401: {
-            toast.warn("Unauthorized user please login...");
+            toast.warn(error.response.data.EM);
             return error.response;
         }
 
         // forbidden (permission related issues)
         case 403: {
-            toast.error("You dont have permistion to access!")
+            toast.warn(error.response.data.EM);
             return error.response;
         }
 

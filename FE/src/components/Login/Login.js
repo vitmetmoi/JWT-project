@@ -17,6 +17,10 @@ const Login = (props) => {
 
     const { user, login, logout } = useContext(UserContext);
 
+    useEffect(() => {
+
+    })
+
     const validateInput = () => {
         setObjValidInput(defaultObjValidInput);
         if (!loginValue || loginValue === '') {

@@ -1,5 +1,6 @@
 import { useState, createContext, useEffect } from "react";
 import { getUserAccountService } from "../service/userService";
+import _ from 'lodash'
 const UserContext = createContext(null);
 
 const UserProvider = ({ children }) => {
@@ -86,7 +87,7 @@ const UserProvider = ({ children }) => {
     }
     // Login updates the user data with a name parameter
     const login = (data) => {
-        console.log('data login', data)
+
         let userData = {
             token: data.token,
             isLoading: false,
@@ -99,13 +100,15 @@ const UserProvider = ({ children }) => {
             iat: data.iat,
             exp: data.exp
         }
-        console.log('data user', data)
+
         setUser(userData);
     };
 
     // Logout updates the user data to default
     const logout = () => {
-        setUser(defaultUserData)
+        let _user = _.cloneDeep(defaultUserData);
+        _user.isLoading = false;
+        setUser(_user)
     };
 
     return (

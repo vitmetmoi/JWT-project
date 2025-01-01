@@ -10,15 +10,16 @@
     }
 
     .middle-icon {
-        position   : relative;
-        margin-left: 29%;
+        position   : absolute;
+        margin-left: 48%;
         cursor     : pointer;
         animation  : rotate 5s linear infinite;
         font-size  : 150%;
     }
 
     .expire-countdown {
-        margin-left: 25%;
+        position   : absolute;
+        margin-left: 74%;
         opacity    : 0.7;
     }
 
@@ -96,4 +97,13 @@
         }
     }
 
+}
+
+.input-group-text {
+    -webkit-touch-callout: none;
+    -webkit-user-select  : none;
+    -khtml-user-select   : none;
+    -moz-user-select     : none;
+    -ms-user-select      : none;
+    user-select          : none;
 }

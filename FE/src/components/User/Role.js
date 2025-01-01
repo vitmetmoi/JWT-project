@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import _ from 'lodash'
 import './Role.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCirclePlus, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faCirclePlus, faCodeCompare, faEarthAfrica, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { v4 as uuidv4 } from 'uuid';
 import { ToastContainer, toast } from 'react-toastify';
 import { addRoleService } from '../../service/userService';
+import RoleTable from './RoleTable';
+
+
 function Role(props) {
     // list of all the cookies
 
@@ -33,16 +36,19 @@ function Role(props) {
         let isValid = true;
 
         Object.keys(roleWithDescription).map((keyName, i) => {
-            console.log('test 11', roleWithDescription[keyName])
+
+            if (isValid === false) {
+                return isValid;
+            }
             if (!roleWithDescription[keyName].role || roleWithDescription[keyName].role === '') {
                 toast('Some URL fields is missing parameter!');
                 isValid = false;
-                return isValid;
+                return;
             }
             if (!roleWithDescription[keyName].description || roleWithDescription[keyName].description === '') {
                 toast('Some description fields is missing parameter!');
                 isValid = false;
-                return isValid;
+                return;
             }
         })
 
@@ -112,8 +118,8 @@ function Role(props) {
         <>
             <div className='role-container'>
                 <div className='container'>
-                    <h3 className='col-12 role-title text-center mt-5'>Add new role</h3>
-                    <div className='col-12 role-items d-flex flex-column' >
+                    <h3 className='col-12 role-title text-center mt-5'> <FontAwesomeIcon icon={faCodeCompare} /> Add new role</h3>
+                    <div className='col-12 role-items d-flex flex-column mt-3' >
 
                         {roleWithDescription && Object.keys(roleWithDescription).map((keyName, i) => {
 
@@ -183,6 +189,8 @@ function Role(props) {
                                 className='btn btn-primary'>Confirm</button>
                         </div>
 
+                        <hr className='mt-5'></hr>
+                        <RoleTable></RoleTable>
 
                     </div>
                 </div>
