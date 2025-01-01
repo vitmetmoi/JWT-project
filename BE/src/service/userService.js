@@ -380,6 +380,65 @@ const addRoleService = async (roleData) => {
     }
 }
 
+const getRoleService = async (currentPage, limit) => {
+    try {
+
+        // let data = await db.Role.findAll();
+        // console.log(data);
+
+        if (!currentPage || !limit) {
+            return {
+                DT: '',
+                EC: -1,
+                EM: 'Missing parameter...!'
+            }
+        }
+        else {
+
+            let offSet = (currentPage - 1) * limit;
+            const { count, rows } = await db.Role.findAndCountAll({
+                nest: true,
+                offset: offSet,
+                limit: +limit,
+                order: [['id', 'DESC']]
+            })
+
+            let totalPages = Math.ceil(count / limit)
+            let data = {
+                totalRows: count,
+                totalPages: totalPages,
+                roleData: rows
+            }
+
+            if (rows) {
+                return {
+                    DT: data,
+                    EC: 0,
+                    EM: 'Completed...!'
+                }
+            }
+            else {
+                return {
+                    DT: '',
+                    EC: -1,
+                    EM: 'Err from sever...!'
+                }
+            }
+        }
+
+    }
+    catch (e) {
+        console.log(e);
+        return {
+            DT: '',
+            EC: -1,
+            EM: 'Err from sever sevice!'
+        }
+
+    }
+}
+
 module.exports = {
-    getUserService, createUserService, deleteUserService, editUserService, getPaginateService, getAccount, addRoleService
+    getUserService, createUserService, deleteUserService,
+    editUserService, getPaginateService, getAccount, addRoleService, getRoleService
 }

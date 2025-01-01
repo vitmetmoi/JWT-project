@@ -196,8 +196,78 @@ const handleAddRole = async (req, res) => {
     }
 }
 
+const handleGetRole = async (req, res) => {
+
+    try {
+        let currentPage = req.query.currentPage;
+        let limit = req.query.limit;
+        console.log(currentPage);
+        let response = await userService.getRoleService(currentPage, limit);
+        return res.status(200).json({
+            DT: response.DT,
+            EC: response.EC,
+            EM: response.EM
+        })
+    }
+    catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            DT: '',
+            EC: -1,
+            EM: 'err from sever...'
+        })
+
+    }
+}
+
+const handleUpdateRole = async (req, res) => {
+
+    try {
+        let role = req.body;
+        let response = await userService.addRoleService(role);
+        return res.status(200).json({
+            DT: response.DT,
+            EC: response.EC,
+            EM: response.EM
+        })
+    }
+    catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            DT: '',
+            EC: -1,
+            EM: 'err from sever...'
+        })
+
+    }
+}
+
+const handleDeleteRole = async (req, res) => {
+
+    try {
+        let role = req.body;
+        let response = await userService.addRoleService(role);
+        return res.status(200).json({
+            DT: response.DT,
+            EC: response.EC,
+            EM: response.EM
+        })
+    }
+    catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            DT: '',
+            EC: -1,
+            EM: 'err from sever...'
+        })
+
+    }
+}
+
+
+
 
 module.exports = {
     handleCreateUser, handleGetUser, handleDeleteUser,
-    handleEditUser, handleGetPaginate, handleGetAccount, handleLogout, handleAddRole
+    handleEditUser, handleGetPaginate, handleGetAccount, handleLogout, handleAddRole, handleGetRole, handleDeleteRole, handleUpdateRole
 }

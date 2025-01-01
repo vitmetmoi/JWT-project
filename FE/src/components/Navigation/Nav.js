@@ -4,7 +4,7 @@ import './Nav.scss'
 import { useHistory, BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { UserContext } from '../../store/UserContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHippo, faPlane, faUser, faSnowflake, faLock } from '@fortawesome/free-solid-svg-icons'
+import { faHippo, faPlane, faUser, faSnowflake, faLock, faKey } from '@fortawesome/free-solid-svg-icons'
 import Select from 'react-select';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
@@ -22,9 +22,10 @@ const Nav = (props) => {
 
     const handleOnClickLogout = async () => {
         try {
-            logout();
+
             let res = await logoutService();
             if (res && res.data.EC === 0) {
+                logout();
                 history.push('/login')
             }
         }
@@ -56,6 +57,7 @@ const Nav = (props) => {
                         <Dropdown.Item ><Link to="/home" class="nav-link" aria-current="page" >Home</Link></Dropdown.Item>
                         <Dropdown.Item ><Link to='/user' class="nav-link" >User</Link></Dropdown.Item>
                         <Dropdown.Item ><Link to='/role' class="nav-link" >Role</Link></Dropdown.Item>
+                        <Dropdown.Item ><Link to='/group' class="nav-link" >Group</Link></Dropdown.Item>
                         <Dropdown.Divider />
                         {
                             user.auth === true ?
@@ -75,9 +77,9 @@ const Nav = (props) => {
                         <li class="nav-item">
                             <Link to='/role' class="nav-link" >Role</Link>
                         </li>
-                        {/* <li class="nav-item">
-                                <Link to='/project' class="nav-link" >Project</Link>
-                            </li> */}
+                        <li class="nav-item">
+                            <Link to='/group' class="nav-link" >Group</Link>
+                        </li>
 
 
                     </ul>
@@ -92,7 +94,7 @@ const Nav = (props) => {
                     <FontAwesomeIcon className='hippo' icon={faSnowflake} />
                 </div>
                 {user && user.exp &&
-                    <div className='expire-countdown '>Your token will be expired in : {
+                    <div className='expire-countdown d-none d-sm-block'>Your token will be expired in : {
                         <Countdown
                             date={user.exp * 1000}
                             renderer={renderer}
@@ -107,7 +109,7 @@ const Nav = (props) => {
                             onChange={''}
                             options={options}
                         /> */}
-                    <DropdownButton id="dropdown-basic-button" title={<FontAwesomeIcon className='account-icon' icon={faLock} />}>
+                    <DropdownButton id="dropdown-basic-button" title={<FontAwesomeIcon className='account-icon' icon={faKey} />}>
                         <Dropdown.Item >Hello{user.account.userName ? ', ' + user.account.userName : ''} </Dropdown.Item>
 
                         <Dropdown.Divider />

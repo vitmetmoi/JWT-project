@@ -23,7 +23,13 @@ const initApiRoutes = (app) => {
     router.get('/getPaginate', userController.handleGetPaginate)
     router.get('/account', userController.handleGetAccount)
     router.post('/logout', userController.handleLogout)
-    router.post('/add-role', userController.handleAddRole)
+
+
+    //Role 
+    router.post('/role/add', userController.handleAddRole)
+    router.get('/role/get', userController.handleGetRole)
+    router.put('/role/update', userController.handleUpdateRole)
+    router.delete('/role/delete', userController.handleDeleteRole)
     return app.use("/api", router)
 }
 

@@ -31,7 +31,11 @@ export const logoutService = () => {
     return axios.post(`/api/logout`)
 }
 export const addRoleService = (data) => {
-    return axios.post(`/api/add-role`, data)
+    return axios.post(`/api/role/add`, data)
+}
+
+export const getRoleService = (currentPage, limit) => {
+    return axios.get(`/api/role/get?currentPage=${currentPage}&limit=${limit}`)
 }
 
 

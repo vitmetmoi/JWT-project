@@ -7,18 +7,12 @@ import ReactPaginate from 'react-paginate';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
 import UserModal from './UserModal';
 import { UserContext } from '../../store/UserContext';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUsers, faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
 
 
 function HomePage(props) {
-
     const { user, login, logout } = useContext(UserContext);
-
-    let itemsPerPage = 3;
-    const items = [...Array(33).keys()];
-
     const [currentPage, setCurrentPage] = useState(1);
     const [currentLimit, setCurrentLimit] = useState(3);
     const [totalPages, setTotalPages] = useState(0);
