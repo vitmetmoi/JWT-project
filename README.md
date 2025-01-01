@@ -57,7 +57,7 @@ The application will be available at `http://localhost:3000`
 
 1. User registers or logs in
 2. Server validates credentials and issues JWT
-3. JWT is stored in cookies/local storage
+3. JWT is stored in cookies
 4. Subsequent requests include JWT in Authorization header
 5. Protected routes/resources verify JWT before granting access
 
