@@ -438,7 +438,100 @@ const getRoleService = async (currentPage, limit) => {
     }
 }
 
+const deleteRoleService = async (roleId) => {
+    try {
+
+        if (!roleId) {
+            return {
+                DT: '',
+                EC: -1,
+                EM: 'Missing parameter...!'
+            }
+        }
+        else {
+
+            let role = await db.Role.findOne({ where: { id: roleId } });
+
+            if (role) {
+                role.destroy();
+                return {
+                    DT: '',
+                    EC: 0,
+                    EM: 'Delete role complete!'
+                }
+
+            }
+            else {
+                return {
+                    DT: '',
+                    EC: -1,
+                    EM: 'Err from sever sevice!'
+                }
+            }
+
+        }
+
+    }
+    catch (e) {
+        console.log(e);
+        return {
+            DT: '',
+            EC: -1,
+            EM: 'Err from sever sevice!'
+        }
+
+    }
+}
+
+const updateRoleService = async (roleData) => {
+    try {
+
+        if (!roleData) {
+            return {
+                DT: '',
+                EC: -1,
+                EM: 'Missing parameter...!'
+            }
+        }
+        else {
+
+            let role = await db.Role.findOne({ where: { id: roleData.id } });
+
+            if (role) {
+                role.url = roleData.url;
+                role.description = roleData.description;
+
+                role.save();
+                return {
+                    DT: '',
+                    EC: 0,
+                    EM: 'Update role complete!'
+                }
+
+            }
+            else {
+                return {
+                    DT: '',
+                    EC: -1,
+                    EM: 'Err from sever sevice!'
+                }
+            }
+
+        }
+
+    }
+    catch (e) {
+        console.log(e);
+        return {
+            DT: '',
+            EC: -1,
+            EM: 'Err from sever sevice!'
+        }
+
+    }
+}
+
 module.exports = {
     getUserService, createUserService, deleteUserService,
-    editUserService, getPaginateService, getAccount, addRoleService, getRoleService
+    editUserService, getPaginateService, getAccount, addRoleService, getRoleService, deleteRoleService, updateRoleService
 }

@@ -223,8 +223,8 @@ const handleGetRole = async (req, res) => {
 const handleUpdateRole = async (req, res) => {
 
     try {
-        let role = req.body;
-        let response = await userService.addRoleService(role);
+        let roleData = req.body;
+        let response = await userService.updateRoleService(roleData);
         return res.status(200).json({
             DT: response.DT,
             EC: response.EC,
@@ -245,8 +245,8 @@ const handleUpdateRole = async (req, res) => {
 const handleDeleteRole = async (req, res) => {
 
     try {
-        let role = req.body;
-        let response = await userService.addRoleService(role);
+        let roleId = req.query.roleId;
+        let response = await userService.deleteRoleService(roleId);
         return res.status(200).json({
             DT: response.DT,
             EC: response.EC,

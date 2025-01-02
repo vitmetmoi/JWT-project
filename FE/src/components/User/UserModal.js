@@ -35,7 +35,6 @@ function UserModal(props) {
             setFormState(defaultFormState);
         }
         else if (props.action === 'EDIT') {
-            console.log('current data', props.userData)
             let data = {
                 userName: props.userData.userName,
                 email: props.userData.email,
@@ -138,8 +137,21 @@ function UserModal(props) {
 
 
                         <div className="title-container">
-                            <div className="redux-title">Create new user</div>
-                            <div className="redux-description d-none d-sm-block ">Add new user name,email,group,...</div>
+                            {
+                                props.action !== 'EDIT' ?
+                                    <div className="redux-title">Create new user</div>
+                                    :
+                                    <div className="redux-title">Edit user information</div>
+                            }
+
+                            {
+                                props.action !== 'EDIT' ?
+                                    <div className="redux-description d-none d-sm-block ">Add new user name,email,group,...</div>
+                                    :
+                                    <div className="redux-description d-none d-sm-block ">Adjust user name,email,group,...</div>
+                            }
+
+
                         </div>
 
                         <div className="doctor-form px-md-5 px-sm-0">
