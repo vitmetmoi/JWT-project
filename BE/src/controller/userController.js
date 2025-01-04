@@ -292,6 +292,7 @@ const handleSetGroup = async (req, res) => {
 
     try {
         let groupData = req.body;
+
         let response = await userService.setGroupService(groupData);
         return res.status(200).json({
             DT: response.DT,

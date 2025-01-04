@@ -560,7 +560,7 @@ const updateRoleService = async (roleData) => {
 const setGroupService = async (groupData) => {
     try {
 
-        if (!groupData) {
+        if (!groupData || groupData.length <= 0) {
             return {
                 DT: '',
                 EC: -1,
@@ -569,29 +569,40 @@ const setGroupService = async (groupData) => {
         }
         else {
 
-            let group = await db.Group_Role.findAll({ where: { groupId: groupData.groupId } });
+            let group = await db.Group_Role.findAll({
+                where: {
+                    groupId: groupData[0].groupId
+                }
+            });
 
 
+            if (group) {
+                group.map((item) => {
+                    item.destroy();
+                })
 
-            if (role) {
-                role.url = roleData.url;
-                role.description = roleData.description;
+            }
 
-                role.save();
+            if (!groupData || groupData.length <= 0) {
                 return {
                     DT: '',
                     EC: 0,
-                    EM: 'Update role complete!'
+                    EM: 'Update group role complete!'
                 }
-
             }
             else {
+                console.log(groupData);
+                await db.Group_Role.bulkCreate(groupData);
                 return {
                     DT: '',
-                    EC: -1,
-                    EM: 'Err from sever sevice!'
+                    EC: 0,
+                    EM: 'Update group role complete!'
                 }
             }
+
+
+
+
 
         }
 
@@ -640,13 +651,20 @@ const getGroupWithRoleService = async (groupId) => {
                             through: {}
                         }]
                     })
-
+                    console.log(groupRoles)
                 }
                 if (groupRoles) {
                     resolve({
                         DT: groupRoles,
                         EC: 0,
                         EM: 'Completed!'
+                    });
+                }
+                else {
+                    resolve({
+                        DT: '',
+                        EC: -1,
+                        EM: 'Err from sever service!'
                     });
                 }
 

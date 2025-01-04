@@ -104,7 +104,7 @@ const checkUserPermission = (req, res, next) => {
                 return res.status(403).json({
                     EC: 401,
                     DT: '',
-                    EM: 'You dont have permistion to access!'
+                    EM: 'You dont have permission to access!'
                 })
             }
             else {
