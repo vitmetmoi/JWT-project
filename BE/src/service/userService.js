@@ -592,7 +592,11 @@ const setGroupService = async (groupData) => {
             }
             else {
                 console.log(groupData);
-                await db.Group_Role.bulkCreate(groupData);
+                // await db.Group_Role.bulkCreate(groupData);
+                for (let i = 0; i < groupData.length; i++) {
+                    let obj = groupData[i];
+                    await db.Group_Role.create(obj)
+                }
                 return {
                     DT: '',
                     EC: 0,
