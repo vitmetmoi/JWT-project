@@ -223,8 +223,8 @@ const handleGetRole = async (req, res) => {
 const handleUpdateRole = async (req, res) => {
 
     try {
-        let role = req.body;
-        let response = await userService.addRoleService(role);
+        let roleData = req.body;
+        let response = await userService.updateRoleService(roleData);
         return res.status(200).json({
             DT: response.DT,
             EC: response.EC,
@@ -245,8 +245,54 @@ const handleUpdateRole = async (req, res) => {
 const handleDeleteRole = async (req, res) => {
 
     try {
-        let role = req.body;
-        let response = await userService.addRoleService(role);
+        let roleId = req.query.roleId;
+
+        let response = await userService.deleteRoleService(roleId);
+        return res.status(200).json({
+            DT: response.DT,
+            EC: response.EC,
+            EM: response.EM
+        })
+    }
+    catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            DT: '',
+            EC: -1,
+            EM: 'err from sever...'
+        })
+
+    }
+}
+
+const handledGetGroupWithRole = async (req, res) => {
+    try {
+        let groupId = req.query.groupId;
+        let response = await userService.getGroupWithRoleService(groupId);
+        return res.status(200).json({
+            DT: response.DT,
+            EC: response.EC,
+            EM: response.EM
+        })
+    }
+    catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            DT: '',
+            EC: -1,
+            EM: 'err from sever...'
+        })
+
+    }
+}
+
+
+
+const handleSetGroup = async (req, res) => {
+
+    try {
+        let groupData = req.body;
+        let response = await userService.setGroupService(groupData);
         return res.status(200).json({
             DT: response.DT,
             EC: response.EC,
@@ -269,5 +315,6 @@ const handleDeleteRole = async (req, res) => {
 
 module.exports = {
     handleCreateUser, handleGetUser, handleDeleteUser,
-    handleEditUser, handleGetPaginate, handleGetAccount, handleLogout, handleAddRole, handleGetRole, handleDeleteRole, handleUpdateRole
+    handleEditUser, handleGetPaginate, handleGetAccount, handleLogout,
+    handleAddRole, handleGetRole, handleDeleteRole, handleUpdateRole, handleSetGroup, handledGetGroupWithRole
 }

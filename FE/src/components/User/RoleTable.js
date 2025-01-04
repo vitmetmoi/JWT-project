@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, forwardRef } from 'react';
 import { getRoleService } from '../../service/userService';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import ReactPaginate from 'react-paginate';
 
-function RoleTable(props) {
+const RoleTable = forwardRef((props, ref) => {
 
     const [listRole, setListRole] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
@@ -13,10 +13,12 @@ function RoleTable(props) {
     const [totalPages, setTotalPages] = useState(0);
 
     useEffect(() => {
-        getRoleData(currentPage, limit);
+        getRoleData();
     }, [currentPage])
 
-    const getRoleData = async (currentPage, limit) => {
+
+
+    const getRoleData = async () => {
         let res = await getRoleService(currentPage, limit);
         if (res && res.data && res.data.EC === 0) {
             let totalPages = res.data.DT.totalPages;
@@ -25,12 +27,7 @@ function RoleTable(props) {
             setListRole(roleData);
         }
     }
-
-    const toggleModalUpdate = () => {
-
-    }
-
-    const toggleModalDelete = () => { }
+    ref.current = getRoleData;
 
     const handlePageClick = (event) => {
         setCurrentPage(+event.selected + 1)
@@ -60,8 +57,8 @@ function RoleTable(props) {
                                             <td>{item.url}</td>
                                             <td>{item.description}</td>
                                             <td className='button-group'>
-                                                <button onClick={() => toggleModalUpdate(item)} className='btn btn-light'><FontAwesomeIcon icon={faTrash} /></button>
-                                                <button onClick={() => toggleModalDelete('EDIT', item)} className='btn btn-primary  '><FontAwesomeIcon icon={faPen} /></button>
+                                                <button onClick={() => props.toggleModalDelete(item)} className='btn btn-light'><FontAwesomeIcon icon={faTrash} /></button>
+                                                <button onClick={() => props.toggleModalUpdate(item)} className='btn btn-primary ms-1'><FontAwesomeIcon icon={faPen} /></button>
                                             </td>
                                         </tr>
                                     </>
@@ -95,6 +92,6 @@ function RoleTable(props) {
 
         </div>
     );
-}
+})
 
 export default RoleTable;

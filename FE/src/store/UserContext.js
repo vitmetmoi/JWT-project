@@ -39,7 +39,7 @@ const UserProvider = ({ children }) => {
                     account: {
                         userName: data.userName && data.userName,
                         email: data.email && data.email,
-                        groupWithRoles: data.groupWithRoles && data.groupWithRoles,
+                        groupWithRoles: data.role && data.role,
                     },
                     iat: data.iat,
                     exp: data.exp

@@ -38,6 +38,17 @@ export const getRoleService = (currentPage, limit) => {
     return axios.get(`/api/role/get?currentPage=${currentPage}&limit=${limit}`)
 }
 
+export const deleteRoleService = (roleId) => {
+    return axios.delete(`/api/role/delete?roleId=${roleId}`)
+}
+
+export const updateRoleService = (roleData) => {
+    return axios.put(`/api/role/update`, roleData)
+}
+
+export const getGroupWithRoleService = (groupId) => {
+    return axios.get(`/api/group/get?groupId=${groupId}`)
+}
 
 // module.exports = {
 //     createUserService, loginService, getUserService, getPaginateService, deleteUserService, editUserService

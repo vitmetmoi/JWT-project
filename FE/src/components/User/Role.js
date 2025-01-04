@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import _ from 'lodash'
 import './Role.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -7,16 +7,18 @@ import { v4 as uuidv4 } from 'uuid';
 import { ToastContainer, toast } from 'react-toastify';
 import { addRoleService } from '../../service/userService';
 import RoleTable from './RoleTable';
-
+import DeleteRoleModal from './DeleteRoleModal';
+import UpdateRoleModal from './UpdateRoleModal';
 
 function Role(props) {
-    // list of all the cookies
 
     const [roleWithDescription, setRoleWithDescription] = useState({
         item0: { role: '', description: '' },
     })
-
-
+    const roleTableRef = useRef(null);
+    const [isOpenModalDelete, setIsOpenModalDelete] = useState(false);
+    const [selectedRole, setSelectedRole] = useState();
+    const [isOpenModalUpdate, setIsOpenModalUpdate] = useState(false);
     const handleOnClickAddItem = () => {
         let size = Object.keys(roleWithDescription).length;
         if (size <= 4) {
@@ -75,6 +77,10 @@ function Role(props) {
         setRoleWithDescription(_roleroleWithDescription);
     }
 
+    const getRoleData = () => {
+        roleTableRef.current();
+    }
+
     const handleOnClickConfrim = async () => {
         if (validateState() === true) {
             let data = [];
@@ -91,10 +97,7 @@ function Role(props) {
                 let res = await addRoleService(data);
                 toast("Loading...", { autoClose: 1500 })
                 if (res && res.data.EC === 0) {
-
-                    // toast(<img className='margin-auto-img'
-                    //     width={'50px'} height={'50px'}
-                    //     src='https://cdn-icons-gif.flaticon.com/17905/17905718.gif'></img>, { autoClose: 1500 })
+                    getRoleData();
                     setTimeout(() => {
                         toast.success(res.data.EM);
                     }, 2000);
@@ -112,6 +115,17 @@ function Role(props) {
 
         }
 
+    }
+
+    const toggleModalDelete = (item) => {
+        setSelectedRole(item);
+        setIsOpenModalDelete(!isOpenModalDelete);
+    }
+
+    const toggleModalUpdate = (item) => {
+        console.log('item', item);
+        setSelectedRole(item);
+        setIsOpenModalUpdate(!isOpenModalUpdate);
     }
 
     return (
@@ -190,7 +204,24 @@ function Role(props) {
                         </div>
 
                         <hr className='mt-5'></hr>
-                        <RoleTable></RoleTable>
+                        <RoleTable
+                            toggleModalDelete={toggleModalDelete}
+                            toggleModalUpdate={toggleModalUpdate}
+                            ref={roleTableRef}
+                        ></RoleTable>
+                        <DeleteRoleModal
+                            getRoleData={getRoleData}
+                            roleData={selectedRole}
+                            isOpenModalDelete={isOpenModalDelete}
+                            toggleModalDelete={toggleModalDelete}
+                        ></DeleteRoleModal>
+
+                        <UpdateRoleModal
+                            getRoleData={getRoleData}
+                            isOpenModalUpdate={isOpenModalUpdate}
+                            toggleModalUpdate={toggleModalUpdate}
+                            roleData={selectedRole}
+                        ></UpdateRoleModal>
 
                     </div>
                 </div>

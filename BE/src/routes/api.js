@@ -30,6 +30,10 @@ const initApiRoutes = (app) => {
     router.get('/role/get', userController.handleGetRole)
     router.put('/role/update', userController.handleUpdateRole)
     router.delete('/role/delete', userController.handleDeleteRole)
+
+    //Group
+    router.post('/group/set', userController.handleSetGroup)
+    router.get('/group/get', userController.handledGetGroupWithRole)
     return app.use("/api", router)
 }
 
