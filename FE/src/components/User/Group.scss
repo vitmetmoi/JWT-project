@@ -1,0 +1,23 @@
+.group-container {
+    .list-role {
+        display       : flex;
+        flex-direction: row;
+        flex-wrap     : wrap;
+        gap           : 25px;
+
+    }
+
+    .submit-button {
+        font-size    : 120%;
+        margin-left  : 45%;
+        width        : fit-content;
+        margin-bottom: 50px;
+    }
+}
+
+
+.card {
+    width  : 18rem !important;
+    cursor : pointer;
+    opacity: 0.9;
+}

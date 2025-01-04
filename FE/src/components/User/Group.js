@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCirclePlus, faCodeCompare, faEarthAfrica, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faCirclePlus, faCodeCompare, faEarthAfrica, faTrash, faDownload } from '@fortawesome/free-solid-svg-icons'
 import { v4 as uuidv4 } from 'uuid';
 import { ToastContainer, toast } from 'react-toastify';
-import { getRoleService, getGroupWithRoleService } from '../../service/userService';
+import { getRoleService, getGroupWithRoleService, setGroupService } from '../../service/userService';
 import _ from 'lodash';
 import { UserContext } from '../../store/UserContext';
+import './Group.scss'
 function Group(props) {
 
     const { user, login, logout } = useContext(UserContext);
@@ -14,35 +15,33 @@ function Group(props) {
     const [selectedGroup, setSelectedGroup] = useState(1);
     useEffect(() => {
         getGroupWithRole('ALL');
-        getRoleData('ALL');
+        getRoleData(1);
     }, [])
 
     const getGroupWithRole = async (groupId) => {
         let res2 = await getGroupWithRoleService(groupId);
         if (res2 && res2.data && res2.data.EC === 0) {
             let groupWithRoles = res2.data.DT;
-            console.log('group', groupWithRoles)
             setGroupData(groupWithRoles);
             return groupWithRoles;
         }
-
     }
 
-    const getRoleData = async () => {
+    const getRoleData = async (groupId) => {
         let res = await getRoleService(0, 'ALL');
         if (res && res.data && res.data.EC === 0) {
             let data = res.data.DT;
-            let result = await buildDataInputSelect(data);
-
+            let result = await buildDataInputSelect(data, groupId);
             setRoleData(result);
         }
     }
 
-    const buildDataInputSelect = async (data) => {
+    const buildDataInputSelect = async (data, groupId) => {
         let result = [];
-        let groupRole = await getGroupWithRole('ALL');
-        let groupWithRole = groupRole[0].Roles;
-
+        let groupRole = await getGroupWithRole(groupId);
+        let groupWithRole = groupRole.Roles;
+        console.log('groupId', groupId)
+        console.log('groupwithrole', groupWithRole)
         if (data && groupWithRole) {
             data.map((item, index) => {
 
@@ -72,6 +71,34 @@ function Group(props) {
 
     const handleOnChangeInput = (value) => {
         setSelectedGroup(value);
+        getRoleData(value);
+    }
+
+    const handleOnClickSubmit = async () => {
+
+
+        let arr = [];
+        roleData.map((item) => {
+            let obj = {};
+            if (item.isSelected === true) {
+                obj.groupId = selectedGroup;
+                obj.roleId = item.id;
+                arr.push(obj);
+            }
+        })
+        if (!arr || arr.length <= 0) {
+            arr.push({ groupId: selectedGroup, roleId: 0 })
+        }
+        let res = await setGroupService(arr);
+        toast("Loading...", { autoClose: 1500 })
+        if (res && res.data && res.data.EC === 0) {
+            setTimeout(() => {
+                toast.success(res.data.EM);
+            }, 2000);
+        }
+        console.log("result arr", arr);
+
+
     }
 
 
@@ -85,7 +112,7 @@ function Group(props) {
                     <select
                         value={selectedGroup && selectedGroup}
                         onChange={(event) => { handleOnChangeInput(event.target.value) }}
-                        className={'form-select'}
+                        className={'form-select mt-3'}
                         aria-label="Default select example">
                         <option value='1' selected>Customer</option>
                         <option value='2' >Dev</option>
@@ -93,20 +120,36 @@ function Group(props) {
                     </select>
                 </div>
 
-                {
-                    roleData && roleData.length > 0 && roleData.map((item, index) => {
-                        return (
-                            <div
-                                onClick={() => handleOnClickRole(item)}
-                                class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" checked={item.isSelected} ></input>
-                                <label class="form-check-label">{item.url}</label>
-                            </div>
-                        )
+                <div className='list-role mt-3'>
+                    {
+                        roleData && roleData.length > 0 && roleData.map((item, index) => {
+                            return (
+                                // <div
+                                //     onClick={() => handleOnClickRole(item)}
+                                //     class="form-check form-switch">
+                                //     <input class="form-check-input" type="checkbox" checked={item.isSelected} ></input>
+                                //     <label class="form-check-label">{item.url}</label>
+                                // </div>
+                                <div
+                                    onClick={() => handleOnClickRole(item)}
+                                    class={item.isSelected ? "card text-dark bg-info   mb-3" : "card border-secondary mb-3"} >
+                                    <div class="card-header">Role</div>
+                                    <div class={item.isSelected ? "card-body" : "card-body text-secondary"}>
+                                        <h5 class="card-title">{item.url}</h5>
+                                        <p class="card-text">description: {item.description}</p>
+                                    </div>
+                                </div>
 
-                    })
-                }
+                            )
 
+                        })
+                    }
+                </div>
+
+
+                <button className='btn btn-light mt-3 submit-button'
+                    onClick={() => handleOnClickSubmit()}
+                ><FontAwesomeIcon icon={faDownload}></FontAwesomeIcon></button>
             </div>
         </>
     );

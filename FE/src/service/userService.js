@@ -50,6 +50,10 @@ export const getGroupWithRoleService = (groupId) => {
     return axios.get(`/api/group/get?groupId=${groupId}`)
 }
 
+export const setGroupService = (data) => {
+    return axios.post(`/api/group/set`, data)
+}
+
 // module.exports = {
 //     createUserService, loginService, getUserService, getPaginateService, deleteUserService, editUserService
 // }
