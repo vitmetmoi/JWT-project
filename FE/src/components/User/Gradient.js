@@ -77,6 +77,39 @@ function Gradient(props) {
 
             </div>
 
+            <div className='text-animation-1 container'>
+                <div id='container'>
+                    Make
+                    <div id="flip">
+                        <div><div>wOrK</div></div>
+                        <div><div>lifeStyle</div></div>
+                        <div><div>Everything</div></div>
+                    </div>
+                    AweSoMe!
+                </div>
+
+            </div>
+
+            <div className='text-animation-2 container'>
+                <div class="container-1">
+                    <div class="box">
+
+                        <div class="title">
+                            <span class="block"></span>
+                            <h1>Obisidian<span></span></h1>
+                        </div>
+
+                        <div class="role">
+                            <div class="block"></div>
+                            <p>UI Dev designer</p>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+
 
 
         </>

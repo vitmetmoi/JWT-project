@@ -1,5 +1,6 @@
 import db from "../models";
-import _, { orderBy } from 'lodash'
+import _, { orderBy } from 'lodash';
+
 const bcrypt = require('bcryptjs');
 
 let hashPasswordService = (userPassword) => {
@@ -395,35 +396,60 @@ const getRoleService = async (currentPage, limit) => {
         }
         else {
 
-            let offSet = (currentPage - 1) * limit;
-            const { count, rows } = await db.Role.findAndCountAll({
-                nest: true,
-                offset: offSet,
-                limit: +limit,
-                order: [['id', 'DESC']]
-            })
+            if (limit === 'ALL') {
+                let data = await db.Role.findAll({
+                    attributes: ['id', 'url', 'description']
+                });
 
-            let totalPages = Math.ceil(count / limit)
-            let data = {
-                totalRows: count,
-                totalPages: totalPages,
-                roleData: rows
-            }
-
-            if (rows) {
-                return {
-                    DT: data,
-                    EC: 0,
-                    EM: 'Completed...!'
+                if (data) {
+                    return {
+                        DT: data,
+                        EC: 0,
+                        EM: 'Completed...!'
+                    }
                 }
+                else {
+                    return {
+                        DT: '',
+                        EC: -1,
+                        EM: 'Err from sever...!'
+                    }
+                }
+
             }
             else {
-                return {
-                    DT: '',
-                    EC: -1,
-                    EM: 'Err from sever...!'
+                let offSet = (currentPage - 1) * limit;
+                const { count, rows } = await db.Role.findAndCountAll({
+                    nest: true,
+                    offset: offSet,
+                    limit: +limit,
+                    order: [['id', 'DESC']]
+                })
+
+                let totalPages = Math.ceil(count / limit)
+                let data = {
+                    totalRows: count,
+                    totalPages: totalPages,
+                    roleData: rows
+                }
+
+                if (rows) {
+                    return {
+                        DT: data,
+                        EC: 0,
+                        EM: 'Completed...!'
+                    }
+                }
+                else {
+                    return {
+                        DT: '',
+                        EC: -1,
+                        EM: 'Err from sever...!'
+                    }
                 }
             }
+
+
         }
 
     }
@@ -531,7 +557,113 @@ const updateRoleService = async (roleData) => {
     }
 }
 
+const setGroupService = async (groupData) => {
+    try {
+
+        if (!groupData) {
+            return {
+                DT: '',
+                EC: -1,
+                EM: 'Missing parameter...!'
+            }
+        }
+        else {
+
+            let group = await db.Group_Role.findAll({ where: { groupId: groupData.groupId } });
+
+
+
+            if (role) {
+                role.url = roleData.url;
+                role.description = roleData.description;
+
+                role.save();
+                return {
+                    DT: '',
+                    EC: 0,
+                    EM: 'Update role complete!'
+                }
+
+            }
+            else {
+                return {
+                    DT: '',
+                    EC: -1,
+                    EM: 'Err from sever sevice!'
+                }
+            }
+
+        }
+
+    }
+    catch (e) {
+        console.log(e);
+        return {
+            DT: '',
+            EC: -1,
+            EM: 'Err from sever sevice!'
+        }
+
+    }
+}
+
+
+const getGroupWithRoleService = async (groupId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!groupId) {
+                resolve({
+                    DT: '',
+                    EC: -1,
+                    EM: 'Missing parameter!'
+                })
+            }
+            else {
+                let groupRoles = '';
+                if (groupId === 'ALL') {
+                    groupRoles = await db.Group.findAll({
+                        include: [{
+                            model: db.Role,
+                            attributes: ['id', 'url', 'description'],
+                            through: {}
+                        }]
+                    })
+
+                }
+
+                else {
+                    groupRoles = await db.Group.findOne({
+                        where: { id: groupId },
+                        include: [{
+                            model: db.Role,
+                            attributes: ['id', 'url', 'description'],
+                            through: {}
+                        }]
+                    })
+
+                }
+                if (groupRoles) {
+                    resolve({
+                        DT: groupRoles,
+                        EC: 0,
+                        EM: 'Completed!'
+                    });
+                }
+
+
+            }
+        }
+
+        catch (e) {
+            reject(e);
+        }
+
+    })
+
+
+}
 module.exports = {
     getUserService, createUserService, deleteUserService,
-    editUserService, getPaginateService, getAccount, addRoleService, getRoleService, deleteRoleService, updateRoleService
+    editUserService, getPaginateService, getAccount, addRoleService,
+    getRoleService, deleteRoleService, updateRoleService, setGroupService, getGroupWithRoleService
 }

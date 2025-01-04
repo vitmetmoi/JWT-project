@@ -91,7 +91,7 @@ let createNewUserService = async (userData) => {
     }
 }
 
-const findGroupWithRole = async (user) => {
+const findGroupWithRole = async (user, type) => {
     return new Promise(async (resolve, reject) => {
         try {
             if (user) {

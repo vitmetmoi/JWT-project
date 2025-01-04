@@ -246,7 +246,53 @@ const handleDeleteRole = async (req, res) => {
 
     try {
         let roleId = req.query.roleId;
+
         let response = await userService.deleteRoleService(roleId);
+        return res.status(200).json({
+            DT: response.DT,
+            EC: response.EC,
+            EM: response.EM
+        })
+    }
+    catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            DT: '',
+            EC: -1,
+            EM: 'err from sever...'
+        })
+
+    }
+}
+
+const handledGetGroupWithRole = async (req, res) => {
+    try {
+        let groupId = req.query.groupId;
+        let response = await userService.getGroupWithRoleService(groupId);
+        return res.status(200).json({
+            DT: response.DT,
+            EC: response.EC,
+            EM: response.EM
+        })
+    }
+    catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            DT: '',
+            EC: -1,
+            EM: 'err from sever...'
+        })
+
+    }
+}
+
+
+
+const handleSetGroup = async (req, res) => {
+
+    try {
+        let groupData = req.body;
+        let response = await userService.setGroupService(groupData);
         return res.status(200).json({
             DT: response.DT,
             EC: response.EC,
@@ -269,5 +315,6 @@ const handleDeleteRole = async (req, res) => {
 
 module.exports = {
     handleCreateUser, handleGetUser, handleDeleteUser,
-    handleEditUser, handleGetPaginate, handleGetAccount, handleLogout, handleAddRole, handleGetRole, handleDeleteRole, handleUpdateRole
+    handleEditUser, handleGetPaginate, handleGetAccount, handleLogout,
+    handleAddRole, handleGetRole, handleDeleteRole, handleUpdateRole, handleSetGroup, handledGetGroupWithRole
 }
