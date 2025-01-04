@@ -39,9 +39,7 @@ function Group(props) {
     const buildDataInputSelect = async (data, groupId) => {
         let result = [];
         let groupRole = await getGroupWithRole(groupId);
-        let groupWithRole = groupRole.Roles;
-        console.log('groupId', groupId)
-        console.log('groupwithrole', groupWithRole)
+        let groupWithRole = groupRole && groupRole.Roles ? groupRole.Roles : '';
         if (data && groupWithRole) {
             data.map((item, index) => {
 
@@ -55,12 +53,10 @@ function Group(props) {
     }
 
     const handleOnClickRole = (item) => {
-        console.log('item', item);
         let roleId = item.id;
         let _roleData = _.cloneDeep(roleData);
         _roleData.map(item => {
             if (item.id === roleId) {
-                console.log('item2', item);
                 item.isSelected = !item.isSelected;
             }
             return item;
