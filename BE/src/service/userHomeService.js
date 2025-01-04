@@ -99,6 +99,7 @@ const findGroupWithRole = async (user, type) => {
 
 
                 let groupRoles = await db.Group.findOne({
+                    where: { id: groupId },
                     include: [{
                         model: db.Role,
                         attributes: ['id', 'url', 'description'],
