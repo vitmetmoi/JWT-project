@@ -11,7 +11,6 @@ import AppRoute from './routes/AppRoute';
 import { Triangle } from 'react-loader-spinner'
 import { UserContext } from './store/UserContext';
 
-
 function App() {
   const { user, login, logout } = useContext(UserContext);
 
@@ -59,6 +58,7 @@ function App() {
             draggable
             pauseOnHover
             theme="light"
+          // limit={1}
           />
 
 

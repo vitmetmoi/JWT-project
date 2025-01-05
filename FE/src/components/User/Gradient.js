@@ -1,7 +1,10 @@
 import React from 'react';
 import './Gradient.scss';
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import { Carousel } from 'react-responsive-carousel';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper.min.css'
+import LazyLoad from 'react-lazyload';
+
+
 function Gradient(props) {
     return (
         <>
@@ -59,25 +62,23 @@ function Gradient(props) {
                 </div>
             </div>
 
-            <div className='carousel-container container'>
-                <Carousel showArrows={true} onSwipeMove={true}>
-                    <div className='image-container'>
-                        <div className='img-carousel img-1' />
+            {/* <div className='carousel-container container'>
+                <Swiper
+                >
+                    <SwiperSlide>Slide 1</SwiperSlide>
+                    <SwiperSlide>Slide 2</SwiperSlide>
+                    <SwiperSlide>Slide 3</SwiperSlide>
+                    <SwiperSlide>Slide 4</SwiperSlide>
+                    <SwiperSlide>Slide 5</SwiperSlide>
+                    <SwiperSlide>Slide 6</SwiperSlide>
+                    <SwiperSlide>Slide 7</SwiperSlide>
+                    <SwiperSlide>Slide 8</SwiperSlide>
+                    <SwiperSlide>Slide 9</SwiperSlide>
+                </Swiper>
 
-                    </div>
-                    <div className='image-container'>
-                        <div className='img-carousel img-2' />
+            </div> */}
 
-                    </div>
-                    <div className='image-container '>
-                        <div className='img-carousel img-3' />
-
-                    </div>
-                </Carousel>
-
-            </div>
-
-            <div className='text-animation-1 container'>
+            {/* <div className='text-animation-1 container'>
                 <div id='container'>
                     Make
                     <div id="flip">
@@ -88,26 +89,70 @@ function Gradient(props) {
                     AweSoMe!
                 </div>
 
+            </div> */}
+
+            <div className='text-animation-2 '>
+                <LazyLoad height={200}>
+                    <div class="container-1">
+                        <div class="box">
+
+                            <div class="title">
+                                <span class="block"></span>
+                                <h1>Obisidian<span></span></h1>
+                            </div>
+
+                            <div class="role">
+                                <div class="block"></div>
+                                <p>Full-snack Dev</p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </LazyLoad>
             </div>
 
-            <div className='text-animation-2 container'>
-                <div class="container-1">
-                    <div class="box">
 
+            <div className='text-animation-3 '>
+                <LazyLoad height={200}>
+                    <div id="app">
                         <div class="title">
-                            <span class="block"></span>
-                            <h1>Obisidian<span></span></h1>
+                            <div class="title-inner">
+                                <div class="cafe">
+                                    <div class="cafe-inner">Why should</div>
+                                </div>
+                                <div class="mozart">
+                                    <div class="mozart-inner">trust me?</div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="role">
-                            <div class="block"></div>
-                            <p>UI Dev designer</p>
+                        <div class="image">
+                            <img src='https://images.unsplash.com/photo-1616362355051-6a9f8c434fff?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTYxNzE0MTYzNQ&ixlib=rb-1.2.1&q=80&w=800&h=600' alt=''></img>
+                            {/* <img src="https://i.pinimg.com/736x/61/2d/f0/612df04143225ded8a94b8a365880687.jpg"></img> */}
                         </div>
-
                     </div>
-                </div>
 
+                    {/* <a href="https://youtu.be/mBY62jtbMYM" target="_blank" data-keyframers-credit style="color: #000"></a> */}
+                    <script src="https://codepen.io/shshaw/pen/QmZYMG.js"></script>
+                </LazyLoad>
+            </div>
 
+            <div className='text-animation-4 container'>
+                <LazyLoad height={200}>
+                    <section class="rotatingText">
+                        <div class="rotatingText-content">
+                            <p class="rotatingText-description">
+                                I'll make your website&hellip;
+                            </p>
+
+                            <h2 class="rotatingText-adjective">beautiful</h2>
+                            <h2 class="rotatingText-adjective">maintainable</h2>
+                            <h2 class="rotatingText-adjective">perfect 👌</h2>
+                        </div>
+                    </section>
+
+                </LazyLoad>
             </div>
 
 
