@@ -4,6 +4,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.css';
 import { UserProvider } from './store/UserContext';
+
 ReactDOM.render(
   <React.StrictMode>
     <UserProvider>
